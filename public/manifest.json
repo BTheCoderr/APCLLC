@@ -1,11 +1,7 @@
 {
   "name": "All Purpose Contractors LLC",
   "short_name": "APC LLC",
-  "description": "Cargo van delivery and moving services in Rhode Island",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#c62a2a",
+  "description": "Cargo van transport and moving services in Rhode Island",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -19,5 +15,10 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "theme_color": "#c62a2a",
+  "background_color": "#000000",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
 } 

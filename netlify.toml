@@ -9,12 +9,8 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false
-  conditions = {Role = ["anonymous"]}
+# Remove the custom redirects that are causing issues
+# The Next.js plugin will handle routing automatically
 
 [dev]
   command = "npm run dev"
