@@ -62,7 +62,7 @@ Additional Details: ${data.details || 'None provided'}`;
         <div className="text-center py-8">
           <h3 className="text-2xl font-bold text-green-600 mb-4">Quote Request Sent!</h3>
           <p className="text-gray-600 mb-6">
-            Thank you for your quote request. We'll review your details and get back to you with pricing information as soon as possible.
+            Thank you for your quote request. We&apos;ll review your details and get back to you with pricing information as soon as possible.
           </p>
           <button
             className="btn-primary"

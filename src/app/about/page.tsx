@@ -1,5 +1,4 @@
 import Navbar from "@/components/Navbar";
-import AboutSection from "@/components/AboutSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import Image from "next/image";
@@ -45,7 +44,7 @@ export default function AboutPage() {
                 We provide professional cargo van transport and moving services across Rhode Island and will soon serve clients nationwide.
               </p>
               <p className="text-gray-700 mb-6 text-lg">
-                Founded by a team of driven entrepreneurs with backgrounds in logistics and operations, we're committed to dependable, affordable, and legal transport solutions — whether you're a business shipping goods or a family relocating locally.
+                Founded by a team of driven entrepreneurs with backgrounds in logistics and operations, we&apos;re committed to dependable, affordable, and legal transport solutions — whether you&apos;re a business shipping goods or a family relocating locally.
               </p>
               
               <div className="space-y-6">

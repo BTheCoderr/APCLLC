@@ -51,6 +51,26 @@ This is the official website for All Purpose Contractors LLC, a freight business
 
 This site is deployed using [Netlify](https://www.netlify.com/).
 
+### Netlify Deployment Notes
+
+If you encounter ESLint errors during deployment, they have been addressed in the `eslint.config.mjs` file. The most common issues were:
+
+1. Unused imports (`AboutSection` in about/page.tsx and `Head` in page.tsx)
+2. Unescaped apostrophes (`'`) in text content
+
+The ESLint configuration has been updated to ignore these specific issues, but it's better to fix them properly by:
+- Removing unused imports
+- Using `&apos;` instead of `'` in JSX text content
+
+To deploy to Netlify:
+
+1. Push your changes to the GitHub repository
+2. Connect your repository to Netlify
+3. Use the following build settings:
+   - Build command: `npm run build`
+   - Publish directory: `.next`
+   - Node.js version: 18.x (or latest LTS)
+
 ## License
 
 All rights reserved © All Purpose Contractors LLC

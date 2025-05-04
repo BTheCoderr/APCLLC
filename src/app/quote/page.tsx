@@ -28,7 +28,7 @@ export default function QuotePage() {
             <div className="lg:col-span-2">
               <h2 className="text-3xl font-bold mb-6">Request Your Quote</h2>
               <p className="text-gray-600 mb-8">
-                Fill out the form below with details about your service needs, and we'll provide 
+                Fill out the form below with details about your service needs, and we&apos;ll provide 
                 you with a customized quote. For immediate assistance, please
                 <Link href="tel:+1234567890" className="text-[#c62a2a] font-medium"> call us directly</Link>.
               </p>

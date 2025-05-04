@@ -66,7 +66,7 @@ const ContactForm = () => {
         <div className="text-center py-8">
           <h3 className="text-2xl font-bold text-green-600 mb-4">Message Sent!</h3>
           <p className="text-gray-600 mb-6">
-            Thank you for contacting us. We'll get back to you as soon as possible.
+            Thank you for contacting us. We&apos;ll get back to you as soon as possible.
           </p>
           <button
             className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-2 px-6 rounded-md transition-colors"

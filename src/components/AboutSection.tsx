@@ -43,7 +43,7 @@ const AboutSection = () => {
             </p>
             <p className="text-lg text-gray-700 mb-8">
               Founded by a team of driven entrepreneurs with backgrounds in logistics and operations, 
-              we're committed to dependable, affordable, and legal transport solutions — whether you're a 
+              we&apos;re committed to dependable, affordable, and legal transport solutions — whether you&apos;re a 
               business shipping goods or a family relocating locally.
             </p>
 
@@ -67,7 +67,7 @@ const AboutSection = () => {
                 <div>
                   <h3 className="text-xl font-semibold mb-1 text-[#d4b14b]">Growing Nationwide</h3>
                   <p className="text-gray-600">
-                    Our federal operating authority is pending final FMCSA activation, and we'll soon be 
+                    Our federal operating authority is pending final FMCSA activation, and we&apos;ll soon be 
                     able to haul freight across all 48 continental U.S. states.
                   </p>
                 </div>

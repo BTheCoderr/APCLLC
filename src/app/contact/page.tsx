@@ -27,7 +27,7 @@ export default function ContactPage() {
             <div className="lg:col-span-2">
               <h2 className="text-3xl font-bold mb-6">Send Us a Message</h2>
               <p className="text-gray-600 mb-8">
-                Fill out the form below and we'll get back to you as soon as possible.
+                Fill out the form below and we&apos;ll get back to you as soon as possible.
                 For urgent requests, please call us directly.
               </p>
               <ContactForm />
