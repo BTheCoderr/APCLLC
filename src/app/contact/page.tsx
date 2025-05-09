@@ -5,7 +5,7 @@ import { FiMapPin, FiPhone, FiMail, FiClock } from "react-icons/fi";
 
 export const metadata = {
   title: "Contact Us | All Purpose Contractors LLC",
-  description: "Get in touch with All Purpose Contractors LLC for cargo van transport and moving services in Rhode Island.",
+  description: "Get in touch with All Purpose Contractors LLC for cargo van transport and moving services throughout the United States.",
 };
 
 export default function ContactPage() {
@@ -43,8 +43,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Our Location</h3>
                     <p className="text-gray-600">
-                      Based in RI<br />
-                      Serving all of the US
+                      Based in Rhode Island<br />
+                      Serving all 48 Continental States
                     </p>
                   </div>
                 </div>
@@ -80,8 +80,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Hours of Operation</h3>
                     <div className="text-gray-600">
-                      <p>Available 24/7</p>
-                      <p className="mt-2 text-sm font-medium">
+                      <p className="font-bold">Available 24/7</p>
+                      <p className="mt-2 text-sm">
                         We never close, call us anytime!
                       </p>
                     </div>

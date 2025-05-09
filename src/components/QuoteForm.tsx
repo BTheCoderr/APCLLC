@@ -32,14 +32,15 @@ const QuoteForm = () => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors }
   } = useForm<QuoteFormData>();
 
-  const onSubmit = async (data: QuoteFormData) => {
-    setIsSubmitting(true);
-    setSubmitError('');
-    
+  // Function to handle direct email preparation
+  const handleDirectEmailSending = (data: QuoteFormData) => {
     try {
+      setIsSubmitting(true);
+      
       // Get service type display name
       const serviceTypeDisplay = serviceTypeMapping[data.serviceType] || data.serviceType;
       
@@ -56,24 +57,27 @@ const QuoteForm = () => {
         `Additional Details:\n${data.details || 'None provided'}`
       );
       
-      // Open default email client
-      const mailtoLink = `mailto:info@apcllc.co?subject=${subject}&body=${body}`;
+      // Open default email client using a link element
+      const tempLink = document.createElement('a');
+      tempLink.href = `mailto:info@apcllc.co?subject=${subject}&body=${body}`;
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      document.body.removeChild(tempLink);
       
-      // Create and click a temporary link element instead of directly setting window.location
-      const linkElement = document.createElement('a');
-      linkElement.href = mailtoLink;
-      document.body.appendChild(linkElement);
-      linkElement.click();
-      document.body.removeChild(linkElement);
-      
+      // Mark as successful and reset the form
       setSubmitSuccess(true);
       reset();
     } catch (error) {
-      setSubmitError('There was a problem submitting your quote request. Please try again or contact us directly.');
-      console.error('Form submission error:', error);
+      setSubmitError('There was a problem preparing your email. Please try again or contact us directly.');
+      console.error('Email preparation error:', error);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // Skip intermediary "async" function to avoid fetch calls
+  const onSubmit = (data: QuoteFormData) => {
+    handleDirectEmailSending(data);
   };
 
   return (
@@ -255,7 +259,7 @@ const QuoteForm = () => {
             className="btn-primary w-full flex justify-center"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Submitting...' : 'Get a Free Quote'}
+            {isSubmitting ? 'Preparing Email...' : 'Get a Free Quote'}
           </button>
         </form>
       )}

@@ -22,35 +22,38 @@ const ContactForm = () => {
     formState: { errors }
   } = useForm<FormData>();
 
-  const onSubmit = async (data: FormData) => {
-    setIsSubmitting(true);
-    setSubmitError('');
-    
+  // Function to handle direct email preparation 
+  const handleDirectEmailSending = (data: FormData) => {
     try {
+      setIsSubmitting(true);
+      
       // Create mailto link with form data
       const subject = encodeURIComponent(`Contact Form Submission from ${data.name}`);
       const body = encodeURIComponent(
         `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\n\nMessage:\n${data.message}`
       );
       
-      // Open default email client
-      const mailtoLink = `mailto:info@apcllc.co?subject=${subject}&body=${body}`;
+      // Open default email client using a link element
+      const tempLink = document.createElement('a');
+      tempLink.href = `mailto:info@apcllc.co?subject=${subject}&body=${body}`;
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      document.body.removeChild(tempLink);
       
-      // Create and click a temporary link element instead of directly setting window.location
-      const linkElement = document.createElement('a');
-      linkElement.href = mailtoLink;
-      document.body.appendChild(linkElement);
-      linkElement.click();
-      document.body.removeChild(linkElement);
-      
+      // Mark as successful and reset the form
       setSubmitSuccess(true);
       reset();
     } catch (error) {
-      setSubmitError('There was a problem submitting your form. Please try again or contact us directly.');
-      console.error('Form submission error:', error);
+      setSubmitError('There was a problem preparing your email. Please try again or contact us directly.');
+      console.error('Email preparation error:', error);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // Skip intermediary "async" function to avoid fetch calls
+  const onSubmit = (data: FormData) => {
+    handleDirectEmailSending(data);
   };
 
   return (
@@ -157,7 +160,7 @@ const ContactForm = () => {
             className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-3 px-6 rounded-md transition-colors w-full flex justify-center"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Sending...' : 'Send Message'}
+            {isSubmitting ? 'Preparing Email...' : 'Send Message'}
           </button>
         </form>
       )}
