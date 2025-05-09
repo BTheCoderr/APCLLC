@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
+
+// Initialize resend with API key
+const resend = new Resend(process.env.RESEND_API_KEY || 're_gM2u71jT_GrykTSRkLunWLHuvtGcQTi7p');
 
 export async function POST(request: Request) {
   try {
@@ -14,55 +17,33 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create a test account on Ethereal for development/testing
-    // In production, you'd use your own SMTP credentials
-    const testAccount = await nodemailer.createTestAccount();
+    // Create the email content
+    const emailHtml = `
+      <h2>New Contact Form Submission</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Phone:</strong> ${phone}</p>
+      <p><strong>Message:</strong></p>
+      <p>${message.replace(/\n/g, '<br>')}</p>
+    `;
 
-    // Configure email transporter
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
-    });
-
-    // Setup email data
-    const mailOptions = {
-      from: `"APC LLC Website" <${testAccount.user}>`,
-      to: email, // Send to the submitter's email (for testing)
-      replyTo: email,
+    // Send email using Resend
+    const result = await resend.emails.send({
+      from: 'APC LLC <onboarding@resend.dev>', // You can use your verified domain if available
+      to: 'info@apcllc.co',
       subject: `Contact Form Submission from ${name}`,
-      text: `
-        Name: ${name}
-        Email: ${email}
-        Phone: ${phone}
-        
-        Message:
-        ${message}
-      `,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
-      `,
-    };
-
-    // Send email
-    const info = await transporter.sendMail(mailOptions);
-
-    // This URL is only used in development with ethereal email
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
-    return NextResponse.json({ 
-      success: true,
-      previewUrl: nodemailer.getTestMessageUrl(info)
+      html: emailHtml,
+      replyTo: email
     });
+
+    if (result.error) {
+      return NextResponse.json(
+        { error: result.error.message },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ success: true, data: result.data });
   } catch (error) {
     console.error('Error in contact form submission:', error);
     return NextResponse.json(
