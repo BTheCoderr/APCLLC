@@ -23,10 +23,10 @@ const Hero = () => {
               <span className="text-[#c62a2a] font-bold">Reliable Cargo Van Delivery</span> & <span className="text-[#d4b14b] font-bold">Moving Services</span>
             </p>
             <p className="text-xl mb-6 text-gray-300">
-              Rhode Island Based, Expanding Nationwide
+              Serving the Entire United States
             </p>
             <p className="text-lg mb-8">
-              Fast, Professional, Local & Long-Haul Hauling with a Personal Touch
+              Fast, Professional, 24/7 Hauling with a Personal Touch
             </p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <Link href="/quote" className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-3 px-8 rounded-md transition-colors">

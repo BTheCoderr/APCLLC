@@ -6,8 +6,8 @@ const Footer = () => {
   // Replace with actual company contact info
   const contactInfo = {
     phone: "(401) 602-4943", // Updated phone number
-    email: "info@apcllc.com", // Updated email address
-    address: "Rhode Island", // Changed from West Warwick to Rhode Island
+    email: "info@apcllc.co", // Updated email address to .co instead of .com
+    address: "Rhode Island", // Simplified to just Rhode Island
     socials: {
       instagram: "https://www.instagram.com/apcllcri", // Replace with actual Instagram URL
       facebook: "https://www.facebook.com/apcllcri", // Replace with actual Facebook URL
@@ -37,10 +37,10 @@ const Footer = () => {
                 <span className="text-[#c62a2a]">APC</span> <span className="text-[#d4b14b]">LLC</span>
               </h3>
             </div>
-            <p className="mb-4">Professional cargo van transport and moving services based in Rhode Island, expanding nationwide.</p>
+            <p className="mb-4">Professional cargo van transport and moving services available nationwide, 24/7.</p>
             <div className="flex items-center mt-4">
               <FiMapPin className="mr-2 text-[#d4b14b]" />
-              <span>{contactInfo.address}</span>
+              <span>{contactInfo.address} - Serving All 48 Continental States</span>
             </div>
           </div>
 
@@ -104,7 +104,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p>© {new Date().getFullYear()} ALL PURPOSE CONTRACTORS LLC. All rights reserved.</p>
             <p className="mt-2 md:mt-0">
-              ALL PURPOSE CONTRACTORS LLC is fully insured and operating in compliance with Rhode Island state regulations.
+              ALL PURPOSE CONTRACTORS LLC is fully insured and operating in compliance with all state and federal regulations.
             </p>
           </div>
         </div>

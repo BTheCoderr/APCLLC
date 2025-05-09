@@ -7,14 +7,14 @@ const services = [
   {
     id: 1,
     title: 'Residential Moving Services',
-    description: 'Local moving services for homes and apartments across Rhode Island.',
+    description: 'Local and long-distance moving services for homes and apartments across the US.',
     icon: <FiHome size={36} className="text-[#c62a2a]" />,
     soon: false
   },
   {
     id: 2,
     title: 'Cargo Van Freight Transport',
-    description: 'Reliable transport for boxes, appliances, and non-palletized cargo.',
+    description: 'Reliable transport for boxes, appliances, and palletized cargo.',
     icon: <FiPackage size={36} className="text-[#c62a2a]" />,
     soon: false
   },
@@ -35,16 +35,16 @@ const services = [
   {
     id: 5,
     title: 'Local Pickup & Drop-Off',
-    description: 'Convenient pickup and delivery services throughout Rhode Island.',
+    description: 'Convenient pickup and delivery services throughout the United States.',
     icon: <FiMapPin size={36} className="text-[#c62a2a]" />,
     soon: false
   },
   {
     id: 6,
     title: 'Interstate Transport',
-    description: 'Transportation services throughout the United States coming soon.',
+    description: 'Transportation services throughout the United States.',
     icon: <FiTruck size={36} className="text-[#c62a2a]" />,
-    soon: true
+    soon: false
   }
 ];
 
@@ -70,8 +70,8 @@ const Services = () => {
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Our <span className="text-[#d4b14b]">Services</span></h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            We specialize in high-roof cargo van capacity, perfect for light freight, 
-            boxes, appliances, and non-palletized cargo.
+            We specialize in extended high-roof cargo van capacity, perfect for light/heavy freight, 
+            boxes, appliances, and palletized cargo.
           </p>
         </div>
 

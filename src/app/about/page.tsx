@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export const metadata = {
   title: "About Us | All Purpose Contractors LLC",
-  description: "Learn about All Purpose Contractors LLC, a professional cargo van transport and moving services company based in Rhode Island.",
+  description: "Learn about All Purpose Contractors LLC, a professional cargo van transport and moving services company based in Rhode Island, serving the entire United States.",
 };
 
 export default function AboutPage() {
@@ -41,10 +41,10 @@ export default function AboutPage() {
             <div>
               <h2 className="text-3xl font-bold mb-6">At <span className="text-[#c62a2a]">ALL PURPOSE CONTRACTORS LLC</span></h2>
               <p className="text-gray-700 mb-4 text-lg">
-                We provide professional cargo van transport and moving services across Rhode Island and will soon serve clients nationwide.
+                We provide professional cargo van transport and moving services across the entire United States.
               </p>
               <p className="text-gray-700 mb-6 text-lg">
-                Founded by a team of driven entrepreneurs with backgrounds in logistics and operations, we&apos;re committed to dependable, affordable, and legal transport solutions — whether you&apos;re a business shipping goods or a family relocating locally.
+                Founded by a team of driven entrepreneurs with backgrounds in logistics and operations, we&apos;re committed to dependable, affordable, and legal transport solutions — whether you&apos;re a business shipping goods or a family relocating locally or across state lines.
               </p>
               
               <div className="space-y-6">
@@ -56,7 +56,7 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-lg text-[#d4b14b]">Fully Insured</h3>
-                    <p className="text-gray-600">Our service is fully insured and operating in compliance with Rhode Island state regulations.</p>
+                    <p className="text-gray-600">Our service is fully insured and operating in compliance with all state and federal regulations.</p>
                   </div>
                 </div>
                 
@@ -67,8 +67,8 @@ export default function AboutPage() {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg text-[#d4b14b]">Nationwide Service Coming Soon</h3>
-                    <p className="text-gray-600">Our federal operating authority is pending final FMCSA activation, and we'll soon be able to haul freight across all 48 continental U.S. states.</p>
+                    <h3 className="font-bold text-lg text-[#d4b14b]">Nationwide Service</h3>
+                    <p className="text-gray-600">We're able to haul freight across all 48 continental U.S. states to meet your transport needs.</p>
                   </div>
                 </div>
               </div>
@@ -83,7 +83,7 @@ export default function AboutPage() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Mission</h2>
             <p className="text-lg text-gray-600 max-w-4xl mx-auto">
               Our mission is to provide reliable, efficient, and affordable cargo van transport
-              and moving services to businesses and individuals throughout Rhode Island and soon nationwide.
+              and moving services to businesses and individuals throughout the United States.
               We are committed to exceptional customer service, timeliness, and ensuring your items arrive safely.
             </p>
           </div>
@@ -114,26 +114,22 @@ export default function AboutPage() {
             <div className="bg-white p-8 rounded-lg shadow-md">
               <h3 className="text-2xl font-bold mb-4 text-[#d4b14b]">Service Areas</h3>
               <p className="text-gray-700 mb-6">
-                We currently serve all cities and towns across Rhode Island, including:
+                We provide service throughout the United States, including:
               </p>
               <div className="grid grid-cols-2 gap-2 text-gray-700">
                 <div>
-                  <p>• Providence</p>
-                  <p>• Warwick</p>
-                  <p>• Cranston</p>
-                  <p>• Pawtucket</p>
-                  <p>• East Providence</p>
+                  <p>• Northeast Region</p>
+                  <p>• Southeast Region</p>
+                  <p>• Midwest Region</p>
                 </div>
                 <div>
-                  <p>• Woonsocket</p>
-                  <p>• Newport</p>
-                  <p>• North Kingstown</p>
-                  <p>• Coventry</p>
-                  <p>• All other RI locations</p>
+                  <p>• Southwest Region</p>
+                  <p>• West Coast Region</p>
+                  <p>• All 48 Continental States</p>
                 </div>
               </div>
               <p className="mt-6 text-gray-700 font-medium">
-                Interstate service coming soon to all 48 continental states!
+                Available 24/7 for all your transport needs!
               </p>
             </div>
           </div>

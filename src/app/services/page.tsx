@@ -38,7 +38,7 @@ export default function ServicesPage() {
               <h3 className="text-2xl font-bold mb-4 text-[#d4b14b]">Residential Moving Services</h3>
               <p className="text-gray-700 mb-6">
                 Our residential moving services are perfect for apartments, small homes, and studio moves
-                within Rhode Island. We provide:
+                nationwide. We provide:
               </p>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <li className="flex items-start">
@@ -51,11 +51,11 @@ export default function ServicesPage() {
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Efficient same-day moves</span>
+                  <span className="text-gray-700">Efficient moves with fast turnaround</span>
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Flexible scheduling options</span>
+                  <span className="text-gray-700">24/7 scheduling options</span>
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
@@ -75,7 +75,7 @@ export default function ServicesPage() {
               <h3 className="text-2xl font-bold mb-4 text-[#d4b14b]">Cargo Van Freight Transport</h3>
               <p className="text-gray-700 mb-6">
                 Our cargo van transport services are ideal for businesses and individuals needing reliable 
-                delivery of goods and items without palletized freight requirements:
+                delivery of goods and items including palletized freight requirements:
               </p>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <li className="flex items-start">

@@ -27,16 +27,7 @@ const ContactForm = () => {
     setSubmitError('');
     
     try {
-      // Create a mailto: link with the form data
-      const subject = `Contact Form Submission from ${data.name}`;
-      const body = `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\n\nMessage:\n${data.message}`;
-      
-      // Use the mailto: protocol to open the default email client with your actual email
-      window.location.href = `mailto:your-actual-email@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      // Replace your-actual-email@example.com with your real email address
-      
-      // For a production website, you would use an API route like this:
-      /*
+      // Send data to our API endpoint
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -46,9 +37,9 @@ const ContactForm = () => {
       });
       
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit form');
       }
-      */
       
       setSubmitSuccess(true);
       reset();

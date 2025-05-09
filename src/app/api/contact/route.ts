@@ -15,20 +15,18 @@ export async function POST(request: Request) {
     }
 
     // Configure email transporter
-    // For testing, we're using a Gmail test account
-    // In production, you should use an email service like SendGrid, Mailgun, etc.
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER || 'info@apcllc.com', // Updated email
-        pass: process.env.EMAIL_PASS || 'your-app-password', // Replace with your app password
+        user: 'info@apcllc.co',
+        pass: 'Apcllc2025$',
       },
     });
 
     // Setup email data
     const mailOptions = {
-      from: `"APC LLC Website" <${process.env.EMAIL_USER || 'info@apcllc.com'}>`, // Updated email
-      to: process.env.CONTACT_EMAIL || 'info@apcllc.com', // Updated email
+      from: `"APC LLC Website" <info@apcllc.co>`,
+      to: 'info@apcllc.co',
       replyTo: email,
       subject: `Contact Form Submission from ${name}`,
       text: `

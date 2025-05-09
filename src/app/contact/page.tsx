@@ -43,8 +43,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Our Location</h3>
                     <p className="text-gray-600">
-                      Based in Rhode Island<br />
-                      Serving all of Rhode Island
+                      Based in RI<br />
+                      Serving all of the US
                     </p>
                   </div>
                 </div>
@@ -68,7 +68,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Email</h3>
                     <p className="text-gray-600">
-                      <a href="mailto:info@apcllc.com" className="hover:text-[#c62a2a]">info@apcllc.com</a>
+                      <a href="mailto:info@apcllc.co" className="hover:text-[#c62a2a]">info@apcllc.co</a>
                     </p>
                   </div>
                 </div>
@@ -80,11 +80,9 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Hours of Operation</h3>
                     <div className="text-gray-600">
-                      <p>Monday - Friday: 7am - 7pm</p>
-                      <p>Saturday: 8am - 5pm</p>
-                      <p>Sunday: Closed</p>
+                      <p>Available 24/7</p>
                       <p className="mt-2 text-sm font-medium">
-                        *Extended hours available by appointment
+                        We never close, call us anytime!
                       </p>
                     </div>
                   </div>

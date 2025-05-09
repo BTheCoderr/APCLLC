@@ -31,20 +31,19 @@ const QuoteForm = () => {
     setSubmitError('');
     
     try {
-      // Create a mailto link with the quote form data
-      const subject = `Quote Request: ${data.serviceType}`;
-      const body = `Name: ${data.name}
-Email: ${data.email}
-Phone: ${data.phone}
-Service Type: ${data.serviceType}
-Pickup Location: ${data.pickupLocation}
-Delivery Location: ${data.deliveryLocation}
-Preferred Date: ${data.date}
-Additional Details: ${data.details || 'None provided'}`;
+      // Send data to our API endpoint
+      const response = await fetch('/api/quote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
       
-      // Use the mailto protocol to open the default email client with your actual email
-      window.location.href = `mailto:your-actual-email@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      // Replace your-actual-email@example.com with your real email address
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit quote request');
+      }
       
       setSubmitSuccess(true);
       reset();

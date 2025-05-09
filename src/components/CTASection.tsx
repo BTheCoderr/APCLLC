@@ -19,7 +19,7 @@ const CTASection = () => {
               Ready to Get Your Items <span className="text-accent">Moving?</span>
             </h2>
             <p className="text-xl mb-6 text-gray-300">
-              Contact us today for reliable cargo van transport and moving services across Rhode Island.
+              Contact us today for reliable cargo van transport and moving services across the United States.
             </p>
             <ul className="space-y-3 mb-8">
               <li className="flex items-start">
@@ -36,7 +36,7 @@ const CTASection = () => {
               </li>
               <li className="flex items-start">
                 <span className="mr-2 text-[#c62a2a]">✓</span>
-                <span>Serving all of Rhode Island</span>
+                <span>Serving all of the US</span>
               </li>
             </ul>
           </motion.div>
@@ -59,7 +59,7 @@ const CTASection = () => {
                   Call Us Now: (401) 602-4943
                 </Link>
                 <p className="mt-2 text-sm text-gray-400">
-                  Available Monday-Saturday, 7am-7pm
+                  Available 24/7, we never close!
                 </p>
               </div>
               

@@ -27,8 +27,8 @@ export async function POST(request: Request) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER || 'info@apcllc.com', // Updated email
-        pass: process.env.EMAIL_PASS || 'your-app-password', // Replace with your app password
+        user: 'info@apcllc.co',
+        pass: 'Apcllc2025$',
       },
     });
 
@@ -43,8 +43,8 @@ export async function POST(request: Request) {
 
     // Setup email data
     const mailOptions = {
-      from: `"APC LLC Website" <${process.env.EMAIL_USER || 'info@apcllc.com'}>`, // Updated email
-      to: process.env.QUOTE_EMAIL || 'info@apcllc.com', // Updated email
+      from: `"APC LLC Website" <info@apcllc.co>`,
+      to: 'info@apcllc.co',
       replyTo: email,
       subject: `Quote Request: ${serviceTypeMapping[serviceType] || serviceType}`,
       text: `
