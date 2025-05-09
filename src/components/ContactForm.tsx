@@ -14,7 +14,6 @@ const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const [previewUrl, setPreviewUrl] = useState('');
   
   const {
     register,
@@ -28,31 +27,26 @@ const ContactForm = () => {
     setSubmitError('');
     
     try {
-      // Send data to our API endpoint
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      // Create mailto link with form data
+      const subject = encodeURIComponent(`Contact Form Submission from ${data.name}`);
+      const body = encodeURIComponent(
+        `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\n\nMessage:\n${data.message}`
+      );
       
-      const responseData = await response.json();
+      // Open default email client
+      const mailtoLink = `mailto:info@apcllc.co?subject=${subject}&body=${body}`;
       
-      if (!response.ok) {
-        throw new Error(responseData.error || 'Failed to submit form');
-      }
+      // Create and click a temporary link element instead of directly setting window.location
+      const linkElement = document.createElement('a');
+      linkElement.href = mailtoLink;
+      document.body.appendChild(linkElement);
+      linkElement.click();
+      document.body.removeChild(linkElement);
       
       setSubmitSuccess(true);
-      
-      // Store preview URL for testing purposes
-      if (responseData.previewUrl) {
-        setPreviewUrl(responseData.previewUrl);
-      }
-      
       reset();
     } catch (error) {
-      setSubmitError('There was a problem submitting your form. Please try again.');
+      setSubmitError('There was a problem submitting your form. Please try again or contact us directly.');
       console.error('Form submission error:', error);
     } finally {
       setIsSubmitting(false);
@@ -63,23 +57,10 @@ const ContactForm = () => {
     <div className="bg-white p-6 rounded-lg shadow-md">
       {submitSuccess ? (
         <div className="text-center py-8">
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Message Sent!</h3>
+          <h3 className="text-2xl font-bold text-green-600 mb-4">Message Ready to Send!</h3>
           <p className="text-gray-600 mb-6">
-            Thank you for contacting us. We&apos;ll get back to you as soon as possible.
+            Your email client has been opened with your message. Please send the email to complete your submission.
           </p>
-          {previewUrl && (
-            <div className="mb-6">
-              <p className="text-sm text-gray-500 mb-2">Since this is a test environment, you can view your message here:</p>
-              <a 
-                href={previewUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                View Test Email
-              </a>
-            </div>
-          )}
           <button
             className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-2 px-6 rounded-md transition-colors"
             onClick={() => setSubmitSuccess(false)}
