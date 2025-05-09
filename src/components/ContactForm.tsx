@@ -23,31 +23,21 @@ const ContactForm = () => {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    setIsSubmitting(true);
-    setSubmitError('');
-    
     try {
-      // Send data to our API endpoint
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      // Create mailto link with form data
+      const subject = encodeURIComponent(`Contact Form Submission from ${data.name}`);
+      const body = encodeURIComponent(
+        `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\n\nMessage:\n${data.message}`
+      );
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to submit form');
-      }
+      // Open default email client
+      window.location.href = `mailto:info@apcllc.co?subject=${subject}&body=${body}`;
       
       setSubmitSuccess(true);
       reset();
     } catch (error) {
-      setSubmitError('There was a problem submitting your form. Please try again.');
+      setSubmitError('There was a problem opening your email client. Please try again or contact us directly.');
       console.error('Form submission error:', error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -55,9 +45,9 @@ const ContactForm = () => {
     <div className="bg-white p-6 rounded-lg shadow-md">
       {submitSuccess ? (
         <div className="text-center py-8">
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Message Sent!</h3>
+          <h3 className="text-2xl font-bold text-green-600 mb-4">Message Ready to Send!</h3>
           <p className="text-gray-600 mb-6">
-            Thank you for contacting us. We&apos;ll get back to you as soon as possible.
+            Your email client has been opened with your message. Please send the email to complete your submission.
           </p>
           <button
             className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-2 px-6 rounded-md transition-colors"
