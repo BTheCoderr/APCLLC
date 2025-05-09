@@ -27,6 +27,7 @@ const QuoteForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [previewUrl, setPreviewUrl] = useState('');
   
   const {
     register,
@@ -36,31 +37,38 @@ const QuoteForm = () => {
   } = useForm<QuoteFormData>();
 
   const onSubmit = async (data: QuoteFormData) => {
+    setIsSubmitting(true);
+    setSubmitError('');
+    
     try {
-      // Get service type display name
-      const serviceTypeDisplay = serviceTypeMapping[data.serviceType] || data.serviceType;
+      // Send data to our API endpoint
+      const response = await fetch('/api/quote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
       
-      // Create mailto link with form data
-      const subject = encodeURIComponent(`Quote Request: ${serviceTypeDisplay}`);
-      const body = encodeURIComponent(
-        `Name: ${data.name}\n` +
-        `Email: ${data.email}\n` +
-        `Phone: ${data.phone}\n` +
-        `Service Type: ${serviceTypeDisplay}\n` +
-        `Pickup Location: ${data.pickupLocation}\n` +
-        `Delivery Location: ${data.deliveryLocation}\n` +
-        `Preferred Date: ${data.date || 'Not specified'}\n\n` +
-        `Additional Details:\n${data.details || 'None provided'}`
-      );
+      const responseData = await response.json();
       
-      // Open default email client
-      window.location.href = `mailto:info@apcllc.co?subject=${subject}&body=${body}`;
+      if (!response.ok) {
+        throw new Error(responseData.error || 'Failed to submit quote request');
+      }
       
       setSubmitSuccess(true);
+      
+      // Store preview URL for testing purposes
+      if (responseData.previewUrl) {
+        setPreviewUrl(responseData.previewUrl);
+      }
+      
       reset();
     } catch (error) {
-      setSubmitError('There was a problem opening your email client. Please try again or contact us directly.');
+      setSubmitError('There was a problem submitting your quote request. Please try again.');
       console.error('Form submission error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -68,10 +76,23 @@ const QuoteForm = () => {
     <div className="bg-white p-6 rounded-lg shadow-md">
       {submitSuccess ? (
         <div className="text-center py-8">
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Quote Request Ready to Send!</h3>
+          <h3 className="text-2xl font-bold text-green-600 mb-4">Quote Request Sent!</h3>
           <p className="text-gray-600 mb-6">
-            Your email client has been opened with your quote request. Please send the email to complete your submission.
+            Thank you for your quote request. We&apos;ll review your details and get back to you with pricing information as soon as possible.
           </p>
+          {previewUrl && (
+            <div className="mb-6">
+              <p className="text-sm text-gray-500 mb-2">Since this is a test environment, you can view your message here:</p>
+              <a 
+                href={previewUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                View Test Email
+              </a>
+            </div>
+          )}
           <button
             className="btn-primary"
             onClick={() => setSubmitSuccess(false)}

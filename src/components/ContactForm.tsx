@@ -14,6 +14,7 @@ const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [previewUrl, setPreviewUrl] = useState('');
   
   const {
     register,
@@ -23,21 +24,38 @@ const ContactForm = () => {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+    setSubmitError('');
+    
     try {
-      // Create mailto link with form data
-      const subject = encodeURIComponent(`Contact Form Submission from ${data.name}`);
-      const body = encodeURIComponent(
-        `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\n\nMessage:\n${data.message}`
-      );
+      // Send data to our API endpoint
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
       
-      // Open default email client
-      window.location.href = `mailto:info@apcllc.co?subject=${subject}&body=${body}`;
+      const responseData = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(responseData.error || 'Failed to submit form');
+      }
       
       setSubmitSuccess(true);
+      
+      // Store preview URL for testing purposes
+      if (responseData.previewUrl) {
+        setPreviewUrl(responseData.previewUrl);
+      }
+      
       reset();
     } catch (error) {
-      setSubmitError('There was a problem opening your email client. Please try again or contact us directly.');
+      setSubmitError('There was a problem submitting your form. Please try again.');
       console.error('Form submission error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -45,10 +63,23 @@ const ContactForm = () => {
     <div className="bg-white p-6 rounded-lg shadow-md">
       {submitSuccess ? (
         <div className="text-center py-8">
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Message Ready to Send!</h3>
+          <h3 className="text-2xl font-bold text-green-600 mb-4">Message Sent!</h3>
           <p className="text-gray-600 mb-6">
-            Your email client has been opened with your message. Please send the email to complete your submission.
+            Thank you for contacting us. We&apos;ll get back to you as soon as possible.
           </p>
+          {previewUrl && (
+            <div className="mb-6">
+              <p className="text-sm text-gray-500 mb-2">Since this is a test environment, you can view your message here:</p>
+              <a 
+                href={previewUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                View Test Email
+              </a>
+            </div>
+          )}
           <button
             className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-2 px-6 rounded-md transition-colors"
             onClick={() => setSubmitSuccess(false)}

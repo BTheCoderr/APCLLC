@@ -14,19 +14,25 @@ export async function POST(request: Request) {
       );
     }
 
+    // Create a test account on Ethereal for development/testing
+    // In production, you'd use your own SMTP credentials
+    const testAccount = await nodemailer.createTestAccount();
+
     // Configure email transporter
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.ethereal.email',
+      port: 587,
+      secure: false, // true for 465, false for other ports
       auth: {
-        user: 'info@apcllc.co',
-        pass: 'Apcllc2025$',
+        user: testAccount.user,
+        pass: testAccount.pass,
       },
     });
 
     // Setup email data
     const mailOptions = {
-      from: `"APC LLC Website" <info@apcllc.co>`,
-      to: 'info@apcllc.co',
+      from: `"APC LLC Website" <${testAccount.user}>`,
+      to: email, // Send to the submitter's email (for testing)
       replyTo: email,
       subject: `Contact Form Submission from ${name}`,
       text: `
@@ -48,9 +54,15 @@ export async function POST(request: Request) {
     };
 
     // Send email
-    await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail(mailOptions);
 
-    return NextResponse.json({ success: true });
+    // This URL is only used in development with ethereal email
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+    return NextResponse.json({ 
+      success: true,
+      previewUrl: nodemailer.getTestMessageUrl(info)
+    });
   } catch (error) {
     console.error('Error in contact form submission:', error);
     return NextResponse.json(
