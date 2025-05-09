@@ -1,8 +1,21 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { FiMapPin, FiMail, FiPhone, FiInstagram, FiFacebook } from 'react-icons/fi';
+import { FiMapPin, FiMail, FiPhone, FiInstagram, FiFacebook, FiTwitter, FiLinkedin } from 'react-icons/fi';
 
 const Footer = () => {
+  // Replace with actual company contact info
+  const contactInfo = {
+    phone: "(401) 602-4943", // Updated phone number
+    email: "info@apcllc.com", // Updated email address
+    address: "Rhode Island", // Changed from West Warwick to Rhode Island
+    socials: {
+      instagram: "https://www.instagram.com/apcllcri", // Replace with actual Instagram URL
+      facebook: "https://www.facebook.com/apcllcri", // Replace with actual Facebook URL
+      twitter: "https://twitter.com/apcllcri", // Replace with actual Twitter URL
+      linkedin: "https://www.linkedin.com/company/all-purpose-contractors-llc" // Replace with actual LinkedIn URL
+    }
+  };
+
   return (
     <footer className="bg-[#000000] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -27,7 +40,7 @@ const Footer = () => {
             <p className="mb-4">Professional cargo van transport and moving services based in Rhode Island, expanding nationwide.</p>
             <div className="flex items-center mt-4">
               <FiMapPin className="mr-2 text-[#d4b14b]" />
-              <span>Based in West Warwick, RI</span>
+              <span>{contactInfo.address}</span>
             </div>
           </div>
 
@@ -59,22 +72,28 @@ const Footer = () => {
             <div className="space-y-4">
               <div className="flex items-center">
                 <FiPhone className="mr-2 text-[#d4b14b]" />
-                <Link href="tel:+1234567890" className="hover:text-[#d4b14b] transition-colors">
-                  (123) 456-7890
+                <Link href={`tel:${contactInfo.phone.replace(/[^\d+]/g, '')}`} className="hover:text-[#d4b14b] transition-colors">
+                  {contactInfo.phone}
                 </Link>
               </div>
               <div className="flex items-center">
                 <FiMail className="mr-2 text-[#d4b14b]" />
-                <Link href="mailto:info@apcllc.co" className="hover:text-[#d4b14b] transition-colors">
-                  info@apcllc.co
+                <Link href={`mailto:${contactInfo.email}`} className="hover:text-[#d4b14b] transition-colors">
+                  {contactInfo.email}
                 </Link>
               </div>
               <div className="flex space-x-4 mt-6">
-                <Link href="https://instagram.com" className="hover:text-[#d4b14b] transition-colors">
+                <Link href={contactInfo.socials.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-[#d4b14b] transition-colors" aria-label="Instagram">
                   <FiInstagram size={24} />
                 </Link>
-                <Link href="https://facebook.com" className="hover:text-[#d4b14b] transition-colors">
+                <Link href={contactInfo.socials.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-[#d4b14b] transition-colors" aria-label="Facebook">
                   <FiFacebook size={24} />
+                </Link>
+                <Link href={contactInfo.socials.twitter} target="_blank" rel="noopener noreferrer" className="hover:text-[#d4b14b] transition-colors" aria-label="Twitter">
+                  <FiTwitter size={24} />
+                </Link>
+                <Link href={contactInfo.socials.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-[#d4b14b] transition-colors" aria-label="LinkedIn">
+                  <FiLinkedin size={24} />
                 </Link>
               </div>
             </div>

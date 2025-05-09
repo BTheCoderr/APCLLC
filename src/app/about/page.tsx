@@ -127,7 +127,7 @@ export default function AboutPage() {
                 <div>
                   <p>• Woonsocket</p>
                   <p>• Newport</p>
-                  <p>• West Warwick</p>
+                  <p>• North Kingstown</p>
                   <p>• Coventry</p>
                   <p>• All other RI locations</p>
                 </div>

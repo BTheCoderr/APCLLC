@@ -52,11 +52,11 @@ const CTASection = () => {
             <div className="space-y-6">
               <div className="flex flex-col items-center">
                 <Link 
-                  href="tel:+1234567890"
+                  href="tel:+14016024943"
                   className="flex items-center justify-center w-full py-3 px-6 bg-[#c62a2a] hover:bg-[#a52222] text-white rounded-md transition-colors font-semibold"
                 >
                   <FiPhone className="mr-2" />
-                  Call Us Now: (123) 456-7890
+                  Call Us Now: (401) 602-4943
                 </Link>
                 <p className="mt-2 text-sm text-gray-400">
                   Available Monday-Saturday, 7am-7pm

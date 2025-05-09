@@ -43,7 +43,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Our Location</h3>
                     <p className="text-gray-600">
-                      Based in West Warwick, RI<br />
+                      Based in Rhode Island<br />
                       Serving all of Rhode Island
                     </p>
                   </div>
@@ -56,7 +56,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Phone</h3>
                     <p className="text-gray-600">
-                      <a href="tel:+1234567890" className="hover:text-[#c62a2a]">(123) 456-7890</a>
+                      <a href="tel:+14016024943" className="hover:text-[#c62a2a]">(401) 602-4943</a>
                     </p>
                   </div>
                 </div>
@@ -68,7 +68,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Email</h3>
                     <p className="text-gray-600">
-                      <a href="mailto:your-actual-email@example.com" className="hover:text-[#c62a2a]">your-actual-email@example.com</a>
+                      <a href="mailto:info@apcllc.com" className="hover:text-[#c62a2a]">info@apcllc.com</a>
                     </p>
                   </div>
                 </div>
