@@ -1,2 +1,4 @@
-/* /.netlify/functions/:splat 200
-/* /index.html 200 
+# Netlify redirects file
+# Redirect all routes to the index.html file for client-side routing
+
+/*    /index.html   200 

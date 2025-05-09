@@ -1,16 +1,20 @@
 [build]
-  command = "npm run build"
-  publish = ".next"
+  command = "npm run netlify-build"
+  publish = "out"
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_VERSION = "9"
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Remove the custom redirects that are causing issues
-# The Next.js plugin will handle routing automatically
+# Define redirects and headers
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 [dev]
   command = "npm run dev"
