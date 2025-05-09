@@ -36,11 +36,9 @@ const QuoteForm = () => {
     formState: { errors }
   } = useForm<QuoteFormData>();
 
-  // Function to handle direct email preparation
+  // Function to handle direct email preparation as fallback
   const handleDirectEmailSending = (data: QuoteFormData) => {
     try {
-      setIsSubmitting(true);
-      
       // Get service type display name
       const serviceTypeDisplay = serviceTypeMapping[data.serviceType] || data.serviceType;
       
@@ -75,22 +73,51 @@ const QuoteForm = () => {
     }
   };
 
-  // Skip intermediary "async" function to avoid fetch calls
-  const onSubmit = (data: QuoteFormData) => {
-    handleDirectEmailSending(data);
+  const onSubmit = async (data: QuoteFormData) => {
+    try {
+      setIsSubmitting(true);
+      setSubmitError('');
+      
+      // First try sending via the API
+      const response = await fetch('/api/quote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send email');
+      }
+
+      // If successful
+      setSubmitSuccess(true);
+      reset();
+    } catch (error) {
+      console.error('Form submission error:', error);
+      
+      // If API fails, fall back to direct email
+      handleDirectEmailSending(data);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       {submitSuccess ? (
         <div className="text-center py-8">
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Quote Request Ready to Send!</h3>
+          <h3 className="text-2xl font-bold text-green-600 mb-4">Quote Request Sent!</h3>
           <p className="text-gray-600 mb-6">
-            Your email client has been opened with your quote request. Please send the email to complete your submission.
+            Thank you for your quote request. We'll get back to you as soon as possible.
           </p>
           <button
             className="btn-primary"
             onClick={() => setSubmitSuccess(false)}
+            suppressHydrationWarning
           >
             Request Another Quote
           </button>
@@ -109,6 +136,7 @@ const QuoteForm = () => {
                   errors.name ? 'border-red-500' : 'border-gray-300'
                 }`}
                 {...register('name', { required: 'Name is required' })}
+                suppressHydrationWarning
               />
               {errors.name && (
                 <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
@@ -132,6 +160,7 @@ const QuoteForm = () => {
                     message: 'Invalid email address',
                   },
                 })}
+                suppressHydrationWarning
               />
               {errors.email && (
                 <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -152,6 +181,7 @@ const QuoteForm = () => {
               {...register('phone', {
                 required: 'Phone number is required',
               })}
+              suppressHydrationWarning
             />
             {errors.phone && (
               <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
@@ -168,6 +198,7 @@ const QuoteForm = () => {
                 errors.serviceType ? 'border-red-500' : 'border-gray-300'
               }`}
               {...register('serviceType', { required: 'Please select a service type' })}
+              suppressHydrationWarning
             >
               <option value="">Select a service...</option>
               <option value="residentialMoving">Residential Moving</option>
@@ -193,6 +224,7 @@ const QuoteForm = () => {
                   errors.pickupLocation ? 'border-red-500' : 'border-gray-300'
                 }`}
                 {...register('pickupLocation', { required: 'Pickup location is required' })}
+                suppressHydrationWarning
               />
               {errors.pickupLocation && (
                 <p className="text-red-500 text-sm mt-1">{errors.pickupLocation.message}</p>
@@ -210,6 +242,7 @@ const QuoteForm = () => {
                   errors.deliveryLocation ? 'border-red-500' : 'border-gray-300'
                 }`}
                 {...register('deliveryLocation', { required: 'Delivery location is required' })}
+                suppressHydrationWarning
               />
               {errors.deliveryLocation && (
                 <p className="text-red-500 text-sm mt-1">{errors.deliveryLocation.message}</p>
@@ -228,6 +261,7 @@ const QuoteForm = () => {
                 errors.date ? 'border-red-500' : 'border-gray-300'
               }`}
               {...register('date', { required: 'Preferred date is required' })}
+              suppressHydrationWarning
             />
             {errors.date && (
               <p className="text-red-500 text-sm mt-1">{errors.date.message}</p>
@@ -245,6 +279,7 @@ const QuoteForm = () => {
                 errors.details ? 'border-red-500' : 'border-gray-300'
               }`}
               {...register('details')}
+              suppressHydrationWarning
             ></textarea>
           </div>
 
@@ -258,8 +293,9 @@ const QuoteForm = () => {
             type="submit"
             className="btn-primary w-full flex justify-center"
             disabled={isSubmitting}
+            suppressHydrationWarning
           >
-            {isSubmitting ? 'Preparing Email...' : 'Get a Free Quote'}
+            {isSubmitting ? 'Sending...' : 'Get a Free Quote'}
           </button>
         </form>
       )}

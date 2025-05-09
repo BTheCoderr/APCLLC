@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   description: "Professional cargo van transport and moving services in Rhode Island and nationwide. Fast, reliable, and affordable delivery solutions.",
   keywords: "cargo van, delivery, moving services, Rhode Island, transport, hauling, freight, local moving, APC LLC, All Purpose Contractors",
   manifest: "/manifest.json",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_METADATA_BASE_URL || 'https://apcllc.co'),
   authors: [{ name: "All Purpose Contractors LLC" }],
   creator: "All Purpose Contractors LLC",
   publisher: "All Purpose Contractors LLC",

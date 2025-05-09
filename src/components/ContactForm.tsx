@@ -22,11 +22,9 @@ const ContactForm = () => {
     formState: { errors }
   } = useForm<FormData>();
 
-  // Function to handle direct email preparation 
+  // Function to handle direct email preparation as fallback
   const handleDirectEmailSending = (data: FormData) => {
     try {
-      setIsSubmitting(true);
-      
       // Create mailto link with form data
       const subject = encodeURIComponent(`Contact Form Submission from ${data.name}`);
       const body = encodeURIComponent(
@@ -51,22 +49,51 @@ const ContactForm = () => {
     }
   };
 
-  // Skip intermediary "async" function to avoid fetch calls
-  const onSubmit = (data: FormData) => {
-    handleDirectEmailSending(data);
+  const onSubmit = async (data: FormData) => {
+    try {
+      setIsSubmitting(true);
+      setSubmitError('');
+      
+      // First try sending via the API
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send email');
+      }
+
+      // If successful
+      setSubmitSuccess(true);
+      reset();
+    } catch (error) {
+      console.error('Form submission error:', error);
+      
+      // If API fails, fall back to direct email
+      handleDirectEmailSending(data);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       {submitSuccess ? (
         <div className="text-center py-8">
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Message Ready to Send!</h3>
+          <h3 className="text-2xl font-bold text-green-600 mb-4">Message Sent!</h3>
           <p className="text-gray-600 mb-6">
-            Your email client has been opened with your message. Please send the email to complete your submission.
+            Thank you for your message. We'll get back to you as soon as possible.
           </p>
           <button
             className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-2 px-6 rounded-md transition-colors"
             onClick={() => setSubmitSuccess(false)}
+            suppressHydrationWarning
           >
             Send Another Message
           </button>
@@ -84,6 +111,7 @@ const ContactForm = () => {
                 errors.name ? 'border-red-500' : 'border-gray-300'
               }`}
               {...register('name', { required: 'Name is required' })}
+              suppressHydrationWarning
             />
             {errors.name && (
               <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
@@ -107,6 +135,7 @@ const ContactForm = () => {
                   message: 'Invalid email address',
                 },
               })}
+              suppressHydrationWarning
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -126,6 +155,7 @@ const ContactForm = () => {
               {...register('phone', {
                 required: 'Phone number is required',
               })}
+              suppressHydrationWarning
             />
             {errors.phone && (
               <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
@@ -143,6 +173,7 @@ const ContactForm = () => {
                 errors.message ? 'border-red-500' : 'border-gray-300'
               }`}
               {...register('message', { required: 'Message is required' })}
+              suppressHydrationWarning
             ></textarea>
             {errors.message && (
               <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
@@ -159,8 +190,9 @@ const ContactForm = () => {
             type="submit"
             className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-3 px-6 rounded-md transition-colors w-full flex justify-center"
             disabled={isSubmitting}
+            suppressHydrationWarning
           >
-            {isSubmitting ? 'Preparing Email...' : 'Send Message'}
+            {isSubmitting ? 'Sending...' : 'Send Message'}
           </button>
         </form>
       )}

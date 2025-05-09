@@ -1,20 +1,35 @@
 [build]
-  command = "npm run netlify-build"
-  publish = "out"
+  command = "npm run build"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_VERSION = "9"
-  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+  NETLIFY_NEXT_PLUGIN_SKIP = "false"
+  RESEND_API_KEY = "re_QQwPHVih_BPqM2kAD4LZ7xEGyuPequ6bA"
+  # Database URL for Postgres with pooler format for IPv4 compatibility
+  DATABASE_URL = "postgres://postgres.nvmtjzdgpwwgfkxitcvs:Apcllc2025%24%24@aws-0-us-east-1.pooler.supabase.com:5432/postgres"
+  # Admin API key for secure API access
+  ADMIN_API_KEY = "apcllc2024adminapi"
+  # Metadata base for Next.js
+  NEXT_PUBLIC_METADATA_BASE_URL = "https://apcllc.co"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Define redirects and headers
+# Configure functions
+[functions]
+  # Set the directory for Netlify Functions (used for API routes)
+  directory = ".netlify/functions-internal"
+  # Set timeout to 30 seconds for longer database operations
+  node_bundler = "esbuild"
+
+# Add redirects for API routes
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
   status = 200
+  force = true
 
 [dev]
   command = "npm run dev"

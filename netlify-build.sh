@@ -12,7 +12,7 @@ echo "NODE_ENV: $NODE_ENV"
 echo "NETLIFY: $NETLIFY"
 
 # Clean up any previous builds
-rm -rf .next out
+rm -rf .next
 
 # Install dependencies
 npm ci
@@ -23,7 +23,7 @@ npm run build
 echo "Build completed successfully!"
 
 # List output directories
-echo "Contents of the 'out' directory:"
-ls -la out
+echo "Contents of the '.next' directory:"
+ls -la .next
 
 echo "Netlify build script completed." 

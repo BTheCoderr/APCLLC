@@ -51,7 +51,7 @@ const Navbar = () => {
         </div>
 
         {/* Phone button - always visible */}
-        <Link href="tel:+1234567890" className="hidden md:flex items-center text-[#d4b14b] hover:text-[#b99537] transition-colors">
+        <Link href="tel:+14016024943" className="hidden md:flex items-center text-[#d4b14b] hover:text-[#b99537] transition-colors">
           <FiPhone className="mr-2" />
           <span className="font-medium">Call Now</span>
         </Link>
@@ -61,6 +61,7 @@ const Navbar = () => {
           className="md:hidden text-white p-2" 
           onClick={toggleMenu}
           aria-label="Toggle menu"
+          suppressHydrationWarning
         >
           {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
         </button>
@@ -106,7 +107,7 @@ const Navbar = () => {
               Get a Quote
             </Link>
             <Link 
-              href="tel:+1234567890" 
+              href="tel:+14016024943" 
               className="flex items-center text-[#d4b14b] py-2"
               onClick={toggleMenu}
             >

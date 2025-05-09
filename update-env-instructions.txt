@@ -1,0 +1,15 @@
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=https://nvmtjzdgpwwgfkxitcvs.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52bXRqemRncHd3Z2ZreGl0Y3ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4MjYxNTAsImV4cCI6MjA2MjQwMjE1MH0._z_unZwNEsDif3f_Dbx-AkaS3tqanDjwhvAqovEtF-8 
+
+# Email Configuration    
+EMAIL_USER=info@apcllc.co
+EMAIL_PASS=Apcllc2025$
+CONTACT_EMAIL=info@apcllc.co
+QUOTE_EMAIL=info@apcllc.co
+
+# Database Configuration
+DATABASE_URL=postgresql://postgres:Apcllc2025$$@db.nvmtjzdgpwwgfkxitcvs.supabase.co:5432/postgres
+
+After updating the file, restart your server with:
+npm run dev 
