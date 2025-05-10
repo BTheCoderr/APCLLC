@@ -36,7 +36,7 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">About <span className="text-[#d4b14b]">Us</span></h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#c62a2a]">About <span className="text-[#c62a2a]">Us</span></h2>
             <p className="text-lg text-gray-700 mb-6">
               At <span className="text-[#c62a2a] font-medium">ALL PURPOSE CONTRACTORS LLC</span>, we provide professional cargo van transport and moving services across 
               Rhode Island and will soon serve clients nationwide.

@@ -68,7 +68,7 @@ const Services = () => {
     <section className="py-12 md:py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Our <span className="text-[#d4b14b]">Services</span></h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#c62a2a]">Our <span className="text-[#c62a2a]">Services</span></h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             We specialize in extended high-roof cargo van capacity, perfect for light/heavy freight, 
             boxes, appliances, and palletized cargo.

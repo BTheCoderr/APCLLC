@@ -16,7 +16,7 @@ export default function ServicesPage() {
       <Navbar />
       <div className="bg-secondary text-white py-16">
         <div className="container-custom">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Our <span className="text-accent">Services</span></h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#c62a2a]">Our <span className="text-[#c62a2a]">Services</span></h1>
           <p className="text-xl text-gray-300">
             Professional cargo van transport and moving services for all your needs
           </p>
@@ -27,7 +27,7 @@ export default function ServicesPage() {
       <section className="section bg-white">
         <div className="container-custom">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Service Details</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#c62a2a]">Service Details</h2>
             <p className="text-lg text-gray-600 max-w-4xl mx-auto">
               Learn more about what each of our specialized services includes
             </p>

@@ -14,7 +14,7 @@ export default function AboutPage() {
       <Navbar />
       <div className="bg-[#000000] text-white py-16">
         <div className="container-custom">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">About <span className="text-[#d4b14b]">Us</span></h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#c62a2a]">About <span className="text-[#c62a2a]">Us</span></h1>
           <p className="text-xl text-gray-300">
             Learn more about All Purpose Contractors LLC and our mission
           </p>
@@ -39,7 +39,7 @@ export default function AboutPage() {
               </div>
             </div>
             <div>
-              <h2 className="text-3xl font-bold mb-6">At <span className="text-[#c62a2a]">ALL PURPOSE CONTRACTORS LLC</span></h2>
+              <h2 className="text-3xl font-bold mb-6 text-[#c62a2a]">At <span className="text-[#c62a2a]">ALL PURPOSE CONTRACTORS LLC</span></h2>
               <p className="text-gray-700 mb-4 text-lg">
                 We provide professional cargo van transport and moving services across the entire United States.
               </p>
@@ -80,7 +80,7 @@ export default function AboutPage() {
       <div className="py-16 bg-gray-50">
         <div className="container-custom">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Mission</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#c62a2a]">Our Mission</h2>
             <p className="text-lg text-gray-600 max-w-4xl mx-auto">
               Our mission is to provide reliable, efficient, and affordable cargo van transport
               and moving services to businesses and individuals throughout the United States.

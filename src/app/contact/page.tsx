@@ -25,7 +25,7 @@ export default function ContactPage() {
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <h2 className="text-3xl font-bold mb-6">Send Us a Message</h2>
+              <h2 className="text-3xl font-bold mb-6 text-[#c62a2a]">Send Us a Message</h2>
               <p className="text-gray-600 mb-8">
                 Fill out the form below and we&apos;ll get back to you as soon as possible.
                 For urgent requests, please call us directly.
@@ -34,14 +34,14 @@ export default function ContactPage() {
             </div>
             
             <div className="bg-gray-50 p-8 rounded-lg shadow-md">
-              <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
+              <h2 className="text-2xl font-bold mb-6 text-[#c62a2a]">Contact Information</h2>
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="flex-shrink-0 mr-4 p-2 bg-blue-100 rounded-full text-[#c62a2a]">
                     <FiMapPin size={24} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">Our Location</h3>
+                    <h3 className="text-lg font-semibold mb-1 text-[#c62a2a]">Our Location</h3>
                     <p className="text-gray-600">
                       Based in Rhode Island<br />
                       Serving all 48 Continental States
@@ -54,7 +54,7 @@ export default function ContactPage() {
                     <FiPhone size={24} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">Phone</h3>
+                    <h3 className="text-lg font-semibold mb-1 text-[#c62a2a]">Phone</h3>
                     <p className="text-gray-600">
                       <a href="tel:+14016024943" className="hover:text-[#c62a2a]">(401) 602-4943</a>
                     </p>
@@ -66,7 +66,7 @@ export default function ContactPage() {
                     <FiMail size={24} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">Email</h3>
+                    <h3 className="text-lg font-semibold mb-1 text-[#c62a2a]">Email</h3>
                     <p className="text-gray-600">
                       <a href="mailto:info@apcllc.co" className="hover:text-[#c62a2a]">info@apcllc.co</a>
                     </p>
@@ -78,7 +78,7 @@ export default function ContactPage() {
                     <FiClock size={24} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">Hours of Operation</h3>
+                    <h3 className="text-lg font-semibold mb-1 text-[#c62a2a]">Hours of Operation</h3>
                     <div className="text-gray-600">
                       <p className="font-bold">Available 24/7</p>
                       <p className="mt-2 text-sm">
@@ -90,7 +90,7 @@ export default function ContactPage() {
               </div>
               
               <div className="mt-10 pt-8 border-t border-gray-200">
-                <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
+                <h2 className="text-xl font-bold mb-4 text-[#c62a2a]">Follow Us</h2>
                 <div className="flex space-x-4">
                   <a href="https://facebook.com" className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors">
                     <span className="sr-only">Facebook</span>
