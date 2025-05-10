@@ -4,14 +4,14 @@ import postgres from 'postgres';
 // This is a temporary solution until the database connection issues are resolved
 
 // Create a fake SQL client that always succeeds but doesn't actually connect
-const sql: any = (strings: any, ...values: any[]) => {
+const sql: postgres.Sql<{}> = (strings: TemplateStringsArray | string, ...values: unknown[]) => {
   console.log('Database operation simulated (not actually connecting)');
   // Return a promise that resolves to an empty array
   return Promise.resolve([]);
 };
 
 // Add a safeQuery method that logs the operation but doesn't actually connect
-sql.safeQuery = async (strings: any, ...values: any[]) => {
+sql.safeQuery = async (strings: TemplateStringsArray | string, ...values: unknown[]) => {
   console.log('Safe database operation simulated (not actually connecting)');
   // For insert operations that return an ID, simulate a success response
   const query = typeof strings === 'object' ? strings[0] || '' : strings;

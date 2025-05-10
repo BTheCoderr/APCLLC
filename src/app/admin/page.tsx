@@ -170,7 +170,7 @@ const AdminDashboard = () => {
     if (apiKey) {
       fetchSubmissions();
     }
-  }, [apiKey]);
+  }, [apiKey, fetchSubmissions]);
 
   const handleLogout = () => {
     setIsAuthenticated(false);

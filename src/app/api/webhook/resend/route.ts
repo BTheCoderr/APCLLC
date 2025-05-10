@@ -39,10 +39,11 @@ export async function POST(request: Request) {
     
     // Return a success response
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    console.error('Error processing Resend webhook:', error);
+  } catch (error: Error | unknown) {
+    console.error('Error handling webhook:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: `Failed to process webhook: ${error.message}` },
+      { error: `Failed to process webhook: ${errorMessage}` },
       { status: 500 }
     );
   }

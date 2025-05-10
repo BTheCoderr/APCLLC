@@ -188,17 +188,19 @@ export async function POST(request: Request) {
           databaseSaved: dbOperationSuccessful 
         } 
       });
-    } catch (sendError: any) {
+    } catch (sendError: Error | unknown) {
       console.error('Error sending email via Resend:', sendError);
+      const errorMessage = sendError instanceof Error ? sendError.message : 'Unknown error';
       return NextResponse.json(
-        { error: `Failed to send email via Resend: ${sendError.message}` },
+        { error: `Failed to send email via Resend: ${errorMessage}` },
         { status: 500 }
       );
     }
-  } catch (error: any) {
+  } catch (error: Error | unknown) {
     console.error('Unexpected error in quote form submission:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: `Failed to process request: ${error.message}` },
+      { error: `Failed to process request: ${errorMessage}` },
       { status: 500 }
     );
   }

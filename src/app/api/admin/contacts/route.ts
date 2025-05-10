@@ -51,10 +51,11 @@ export async function GET(request: Request) {
         pages: Math.ceil(total / limit)
       }
     });
-  } catch (error: any) {
-    console.error('Error fetching contact submissions:', error);
+  } catch (error: Error | unknown) {
+    console.error('Error retrieving contact submissions:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: `Failed to fetch contact submissions: ${error.message}` },
+      { error: `Failed to retrieve contact submissions: ${errorMessage}` },
       { status: 500 }
     );
   }

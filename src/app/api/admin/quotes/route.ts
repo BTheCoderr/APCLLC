@@ -51,10 +51,11 @@ export async function GET(request: Request) {
         pages: Math.ceil(total / limit)
       }
     });
-  } catch (error: any) {
-    console.error('Error fetching quote submissions:', error);
+  } catch (error: Error | unknown) {
+    console.error('Error retrieving quote submissions:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: `Failed to fetch quote submissions: ${error.message}` },
+      { error: `Failed to retrieve quote submissions: ${errorMessage}` },
       { status: 500 }
     );
   }
