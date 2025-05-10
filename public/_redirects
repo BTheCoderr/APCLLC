@@ -1,4 +1,6 @@
 # Netlify redirects file
-# Redirect all routes to the index.html file for client-side routing
+# Redirect /lander to homepage 
+/lander    /    301
 
+# Redirect all routes to the index.html file for client-side routing
 /*    /index.html   200 

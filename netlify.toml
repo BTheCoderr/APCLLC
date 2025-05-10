@@ -28,6 +28,13 @@
   # Set timeout to 30 seconds for longer database operations
   node_bundler = "esbuild"
 
+# Redirect /lander to homepage
+[[redirects]]
+  from = "/lander"
+  to = "/"
+  status = 301
+  force = true
+
 # Add redirects for API routes
 [[redirects]]
   from = "/api/*"

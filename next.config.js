@@ -14,7 +14,7 @@ const nextConfig = {
   webpack: (config) => {
     return config;
   },
-  // Disable all type checking and linting during build - CRITICAL for Netlify
+  // Disable type checking and linting during build - CRITICAL for Netlify
   typescript: {
     // This completely disables TypeScript checking during build
     ignoreBuildErrors: true, 
@@ -22,12 +22,6 @@ const nextConfig = {
   eslint: {
     // This completely disables ESLint checking during build
     ignoreDuringBuilds: true,
-  },
-  // Skip type checking with SWC
-  swcMinify: true,
-  experimental: {
-    // Disable fast refresh type checking
-    swcPlugins: []
   },
 };
 
