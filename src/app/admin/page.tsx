@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface FormSubmission {
@@ -58,7 +58,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const fetchSubmissions = async () => {
+  const fetchSubmissions = useCallback(async () => {
     if (!apiKey) return;
     
     setIsLoading(true);
@@ -133,7 +133,7 @@ const AdminDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [apiKey, contactPagination.limit, contactPagination.page, quotePagination.limit, quotePagination.page]);
 
   const changePage = (tab: string, newPage: number) => {
     if (tab === 'contacts') {

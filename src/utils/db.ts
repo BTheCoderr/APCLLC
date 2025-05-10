@@ -4,7 +4,7 @@ import postgres from 'postgres';
 // This is a temporary solution until the database connection issues are resolved
 
 // Create a fake SQL client that always succeeds but doesn't actually connect
-const sql: postgres.Sql<{}> = (strings: TemplateStringsArray | string, ...values: unknown[]) => {
+const sql: postgres.Sql<Record<string, never>> = (strings: TemplateStringsArray | string, ...values: unknown[]) => {
   console.log('Database operation simulated (not actually connecting)');
   // Return a promise that resolves to an empty array
   return Promise.resolve([]);
