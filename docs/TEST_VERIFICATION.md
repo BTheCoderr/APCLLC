@@ -10,7 +10,7 @@ Local QA on `feature/apc-modern-redesign` against a production build (`next star
 | Unit tests | `npm test` | Pass — 8 tests |
 | Lint | `npm run lint` | Pass |
 | Typecheck | `npm run typecheck` | Pass |
-| Production build | `npm run build` | Pass |
+| Production build | `npm run build` | Pass (Next.js 15.3.8 after CVE patch) |
 
 ## Route checks (`next start`)
 
@@ -40,6 +40,7 @@ Local QA on `feature/apc-modern-redesign` against a production build (`next star
 - Phone `tel:+14016024943`, email `mailto:info@apcllc.co`, text `sms:+14016024943`.
 - Duplicate submit is blocked while a request is in flight.
 - Photo upload is intentionally absent.
+- Next.js was bumped from 15.3.1 to 15.3.8 after Netlify blocked the first preview for CVE-2025-55182. This stays on the 15.3 line.
 - Resend is initialized only at request time from `RESEND_API_KEY` (no hardcoded key in application code).
 - A full live email send to `info@apcllc.co` was **not** performed from this environment so a customer mailbox was not spammed. Confirm one preview-environment test quote after Netlify deploys the branch.
 

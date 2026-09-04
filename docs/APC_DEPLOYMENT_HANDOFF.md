@@ -31,6 +31,7 @@ These already match production and were not rewritten in the Netlify UI:
 | Publish directory | `.next` |
 | Plugin | `@netlify/plugin-nextjs` |
 | Node | 18 |
+| Next.js | 15.3.8 (patched for CVE-2025-55182; Netlify blocks 15.3.1) |
 | Redirect | `/lander` → `/` 301 |
 
 `public/_redirects` no longer includes a CRA-style `/* /index.html 200` catch-all. Next.js plus the Netlify plugin handles routing. The `/lander` redirect remains.
