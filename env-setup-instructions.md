@@ -1,10 +1,18 @@
 # Environment Variables Setup
 
-Create a file named `.env.local` in the root of your project with the following content:
+Create a gitignored `.env.local` file using the names in `.env.example`.
 
-```
-NEXT_PUBLIC_SUPABASE_URL=https://nvmtjzdgpwwgfkxitcvs.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52bXRqemRncHd3Z2ZreGl0Y3ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4MjYxNTAsImV4cCI6MjA2MjQwMjE1MH0._z_unZwNEsDif3f_Dbx-AkaS3tqanDjwhvAqovEtF-8
-```
+Do not put secret values in git, screenshots, or documentation.
 
-After creating this file, restart your development server for the changes to take effect. 
+Server-only names that must exist in the Netlify UI for Production and Deploy Previews:
+
+- `RESEND_API_KEY`
+- `DATABASE_URL`
+- `ADMIN_API_KEY`
+
+Public site URL names:
+
+- `NEXT_PUBLIC_METADATA_BASE_URL=https://apcllc.co`
+- `NEXT_PUBLIC_BASE_URL=https://apcllc.co`
+
+Restart the development server after changing local env files.

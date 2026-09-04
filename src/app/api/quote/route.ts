@@ -1,12 +1,19 @@
-import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
-import sql from '@/utils/db';
-import { escapeHtml, htmlLines } from '@/lib/html';
-import { displayServiceType, validateQuotePayload } from '@/lib/quote';
-import { SITE } from '@/lib/site';
+import { NextResponse } from "next/server";
+import { Resend } from "resend";
+import sql from "@/utils/db";
+import { escapeHtml, htmlLines } from "@/lib/html";
+import { displayServiceType, validateQuotePayload } from "@/lib/quote";
+import { SITE } from "@/lib/site";
+import { getClientIp } from "@/lib/admin-auth";
+import { rateLimit } from "@/lib/rate-limit";
+import {
+  isDuplicateSubmission,
+  PUBLIC_FORM_ERROR,
+  submissionFingerprint,
+} from "@/lib/form-guard";
 
 function extraRow(label: string, value?: string) {
-  if (!value) return '';
+  if (!value) return "";
   return `<p><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</p>`;
 }
 
@@ -18,6 +25,15 @@ function getResend() {
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const limited = rateLimit(`quote:${ip}`, 8, 10 * 60 * 1000);
+    if (!limited.ok) {
+      return NextResponse.json(
+        { error: "Too many quote requests. Please wait a few minutes or call APC." },
+        { status: 429 }
+      );
+    }
+
     const data = await request.json();
     const {
       name,
@@ -42,17 +58,28 @@ export async function POST(request: Request) {
     } = data;
 
     if (validateQuotePayload(data)) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    const fingerprint = submissionFingerprint({
+      email,
+      phone,
+      serviceType,
+      pickupLocation,
+      deliveryLocation,
+    });
+    if (isDuplicateSubmission(fingerprint)) {
+      return NextResponse.json({ success: true, databaseSaved: false, duplicate: true });
     }
 
     const resend = getResend();
     if (!resend) {
-      return NextResponse.json({ error: 'Email service is not configured' }, { status: 500 });
+      return NextResponse.json({ error: PUBLIC_FORM_ERROR }, { status: 500 });
     }
 
     const serviceTypeDisplay = displayServiceType(serviceType);
     let dbOperationSuccessful = false;
-    let submissionId = null;
+    let submissionId: unknown = null;
 
     try {
       const result = await sql.safeQuery`
@@ -73,23 +100,23 @@ export async function POST(request: Request) {
         submissionId = result[0].id;
         dbOperationSuccessful = true;
       }
-    } catch (dbError) {
-      console.error('Database operation failed, continuing with email only:', dbError);
+    } catch {
+      console.error("Database operation failed, continuing with email only");
     }
 
     const extraHtml = [
-      extraRow('Preferred contact method', preferredContactMethod),
-      extraRow('Pickup ZIP', pickupZip),
-      extraRow('Delivery ZIP', deliveryZip),
-      extraRow('Preferred time', preferredTime),
-      extraRow('Item category', itemCategory),
-      extraRow('Quantity', quantity),
-      extraRow('Approximate weight', approximateWeight),
-      extraRow('Dimensions', dimensions),
-      extraRow('Loading assistance', loadingAssistance),
-      extraRow('Stairs or access', stairsAccess),
-      extraRow('Urgency', urgency),
-    ].join('');
+      extraRow("Preferred contact method", preferredContactMethod),
+      extraRow("Pickup ZIP", pickupZip),
+      extraRow("Delivery ZIP", deliveryZip),
+      extraRow("Preferred time", preferredTime),
+      extraRow("Item category", itemCategory),
+      extraRow("Quantity", quantity),
+      extraRow("Approximate weight", approximateWeight),
+      extraRow("Dimensions", dimensions),
+      extraRow("Loading assistance", loadingAssistance),
+      extraRow("Stairs or access", stairsAccess),
+      extraRow("Urgency", urgency),
+    ].join("");
 
     const adminEmailHtml = `
       <h2>New Quote Request</h2>
@@ -99,11 +126,11 @@ export async function POST(request: Request) {
       <p><strong>Service Type:</strong> ${escapeHtml(serviceTypeDisplay)}</p>
       <p><strong>Pickup Location:</strong> ${escapeHtml(pickupLocation)}</p>
       <p><strong>Delivery Location:</strong> ${escapeHtml(deliveryLocation)}</p>
-      <p><strong>Preferred Date:</strong> ${escapeHtml(date || 'Not specified')}</p>
+      <p><strong>Preferred Date:</strong> ${escapeHtml(date || "Not specified")}</p>
       ${extraHtml}
       <p><strong>Additional Details:</strong></p>
-      <p>${details ? htmlLines(String(details)) : 'None provided'}</p>
-      <p><em>Note: ${dbOperationSuccessful ? 'This submission was saved to the database.' : 'This submission could NOT be saved to the database due to connection issues.'}</em></p>
+      <p>${details ? htmlLines(String(details)) : "None provided"}</p>
+      <p><em>Note: ${dbOperationSuccessful ? "This submission was saved to the database." : "This submission could NOT be saved to the database due to connection issues."}</em></p>
     `;
 
     const userEmailHtml = `
@@ -126,14 +153,18 @@ export async function POST(request: Request) {
         </tr>
         <tr>
           <td style="padding: 8px; border: 1px solid #ddd;"><strong>Preferred Date:</strong></td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${escapeHtml(date || 'Not specified')}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">${escapeHtml(date || "Not specified")}</td>
         </tr>
-        ${details ? `
+        ${
+          details
+            ? `
         <tr>
           <td style="padding: 8px; border: 1px solid #ddd;"><strong>Additional Details:</strong></td>
           <td style="padding: 8px; border: 1px solid #ddd;">${htmlLines(String(details))}</td>
         </tr>
-        ` : ''}
+        `
+            : ""
+        }
       </table>
       <p>If you need immediate assistance, please call us at ${SITE.phoneDisplay}.</p>
       <p>Best regards,<br>The APC LLC Team</p>
@@ -167,33 +198,21 @@ export async function POST(request: Request) {
             WHERE
               id = ${submissionId}
           `;
-        } catch (updateError) {
-          console.error('Error updating database with email status:', updateError);
+        } catch {
+          console.error("Error updating database with email status");
         }
       }
 
       return NextResponse.json({
         success: true,
-        data: {
-          adminEmail: adminResult.data,
-          userEmail: userResult.data,
-          databaseSaved: dbOperationSuccessful,
-        },
+        databaseSaved: dbOperationSuccessful,
       });
-    } catch (sendError: Error | unknown) {
-      console.error('Error sending email via Resend:', sendError);
-      const errorMessage = sendError instanceof Error ? sendError.message : 'Unknown error';
-      return NextResponse.json(
-        { error: `Failed to send email via Resend: ${errorMessage}` },
-        { status: 500 }
-      );
+    } catch {
+      console.error("Error sending quote email via Resend");
+      return NextResponse.json({ error: PUBLIC_FORM_ERROR }, { status: 500 });
     }
-  } catch (error: Error | unknown) {
-    console.error('Unexpected error in quote form submission:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json(
-      { error: `Failed to process request: ${errorMessage}` },
-      { status: 500 }
-    );
+  } catch {
+    console.error("Unexpected error in quote form submission");
+    return NextResponse.json({ error: PUBLIC_FORM_ERROR }, { status: 500 });
   }
 }

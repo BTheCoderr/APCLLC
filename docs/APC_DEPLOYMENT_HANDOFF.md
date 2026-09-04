@@ -86,7 +86,7 @@ Photo upload was **not** added. The current JSON + Resend path has no safe file 
 - `/sitemap.xml`
 - `/robots.txt`
 
-Existing routes `/`, `/about`, `/services`, `/contact`, `/quote`, and `/admin` remain.
+Existing routes `/`, `/about`, `/services`, `/contact`, and `/quote` remain. `/admin` now returns 404 until cookie-based admin auth is built. `/api/admin/*` stays but requires a server-side `ADMIN_API_KEY` and returns no customer data without it.
 
 ---
 
@@ -94,10 +94,10 @@ Existing routes `/`, `/about`, `/services`, `/contact`, `/quote`, and `/admin` r
 
 1. Confirm Instagram, Facebook, X/Twitter, and LinkedIn URLs are the live business profiles.
 2. Supply real photographs listed in `docs/MISSING_ASSETS.md`.
-3. Rotate credentials that currently live in git history, then store replacements only in the Netlify UI.
-4. Decide whether `/admin` should keep its current client-side password gate or be replaced with real auth later.
+3. Rotate credentials that exist in git history (`RESEND_API_KEY`, `DATABASE_URL`, `ADMIN_API_KEY`, and any mailbox password previously stored as `EMAIL_PASS`). Store replacements only in the Netlify UI for Production and Deploy Previews. See `docs/APC_SECURITY_PASS.md`.
+4. `/admin` is disabled (404). A later PR should add HttpOnly cookie sessions if an admin dashboard is still needed.
 5. Confirm whether local residential hauling should remain in the quote dropdown (it is labeled as not interstate household goods).
-6. Confirm the Netlify preview URL after the first branch deploy and add it to the pull request.
+6. Send one labeled preview quote after env vars are confirmed in Netlify.
 
 ---
 

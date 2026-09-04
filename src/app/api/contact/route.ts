@@ -1,8 +1,15 @@
-import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
-import sql from '@/utils/db';
-import { escapeHtml, htmlLines } from '@/lib/html';
-import { SITE } from '@/lib/site';
+import { NextResponse } from "next/server";
+import { Resend } from "resend";
+import sql from "@/utils/db";
+import { escapeHtml, htmlLines } from "@/lib/html";
+import { SITE } from "@/lib/site";
+import { getClientIp } from "@/lib/admin-auth";
+import { rateLimit } from "@/lib/rate-limit";
+import {
+  isDuplicateSubmission,
+  PUBLIC_FORM_ERROR,
+  submissionFingerprint,
+} from "@/lib/form-guard";
 
 function getResend() {
   const apiKey = process.env.RESEND_API_KEY;
@@ -12,20 +19,34 @@ function getResend() {
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const limited = rateLimit(`contact:${ip}`, 8, 10 * 60 * 1000);
+    if (!limited.ok) {
+      return NextResponse.json(
+        { error: "Too many messages. Please wait a few minutes or call APC." },
+        { status: 429 }
+      );
+    }
+
     const data = await request.json();
     const { name, email, phone, message } = data;
 
     if (!name || !email || !phone || !message) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    const fingerprint = submissionFingerprint({ email, phone, message });
+    if (isDuplicateSubmission(fingerprint)) {
+      return NextResponse.json({ success: true, databaseSaved: false, duplicate: true });
     }
 
     const resend = getResend();
     if (!resend) {
-      return NextResponse.json({ error: 'Email service is not configured' }, { status: 500 });
+      return NextResponse.json({ error: PUBLIC_FORM_ERROR }, { status: 500 });
     }
 
     let dbOperationSuccessful = false;
-    let submissionId = null;
+    let submissionId: unknown = null;
 
     try {
       const result = await sql.safeQuery`
@@ -41,8 +62,8 @@ export async function POST(request: Request) {
         submissionId = result[0].id;
         dbOperationSuccessful = true;
       }
-    } catch (dbError) {
-      console.error('Database operation failed, continuing with email only:', dbError);
+    } catch {
+      console.error("Database operation failed, continuing with email only");
     }
 
     const adminEmailHtml = `
@@ -52,7 +73,7 @@ export async function POST(request: Request) {
       <p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
       <p><strong>Message:</strong></p>
       <p>${htmlLines(String(message))}</p>
-      <p><em>Note: ${dbOperationSuccessful ? 'This submission was saved to the database.' : 'This submission could NOT be saved to the database due to connection issues.'}</em></p>
+      <p><em>Note: ${dbOperationSuccessful ? "This submission was saved to the database." : "This submission could NOT be saved to the database due to connection issues."}</em></p>
     `;
 
     const userEmailHtml = `
@@ -95,33 +116,21 @@ export async function POST(request: Request) {
             WHERE
               id = ${submissionId}
           `;
-        } catch (updateError) {
-          console.error('Error updating database with email status:', updateError);
+        } catch {
+          console.error("Error updating database with email status");
         }
       }
 
       return NextResponse.json({
         success: true,
-        data: {
-          adminEmail: adminResult.data,
-          userEmail: userResult.data,
-          databaseSaved: dbOperationSuccessful,
-        },
+        databaseSaved: dbOperationSuccessful,
       });
-    } catch (sendError: Error | unknown) {
-      console.error('Error sending email via Resend:', sendError);
-      const errorMessage = sendError instanceof Error ? sendError.message : 'Unknown error';
-      return NextResponse.json(
-        { error: `Failed to send email via Resend: ${errorMessage}` },
-        { status: 500 }
-      );
+    } catch {
+      console.error("Error sending contact email via Resend");
+      return NextResponse.json({ error: PUBLIC_FORM_ERROR }, { status: 500 });
     }
-  } catch (error: Error | unknown) {
-    console.error('Unexpected error in contact form submission:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    return NextResponse.json(
-      { error: `Failed to process request: ${errorMessage}` },
-      { status: 500 }
-    );
+  } catch {
+    console.error("Unexpected error in contact form submission");
+    return NextResponse.json({ error: PUBLIC_FORM_ERROR }, { status: 500 });
   }
 }

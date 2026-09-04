@@ -7,7 +7,7 @@ Local QA on `feature/apc-modern-redesign` against a production build (`next star
 | Check | Command | Result |
 | --- | --- | --- |
 | Install | `npm install` (repo uses npm / `package-lock.json`) | Pass |
-| Unit tests | `npm test` | Pass — 8 tests |
+| Unit tests | `npm test` | Pass — 17 tests |
 | Lint | `npm run lint` | Pass |
 | Typecheck | `npm run typecheck` | Pass |
 | Production build | `npm run build` | Pass (Next.js 15.3.8 after CVE patch) |
@@ -24,7 +24,7 @@ Local QA on `feature/apc-modern-redesign` against a production build (`next star
 | `/about` | 200 — USDOT/MC present, no pending-authority copy |
 | `/contact` | 200 |
 | `/quote` | 200 |
-| `/admin` | 200 — existing admin gate preserved |
+| `/admin` | 404 — dashboard disabled until cookie auth |
 | `/lander` | Next.js 404 locally; Netlify 301 remains in `netlify.toml` (live-confirmed on production) |
 | `/sitemap.xml` | 200 — all public pages listed |
 | `/robots.txt` | 200 — allows `/`, disallows `/admin` and `/api/` |
@@ -41,6 +41,7 @@ Local QA on `feature/apc-modern-redesign` against a production build (`next star
 - Duplicate submit is blocked while a request is in flight.
 - Photo upload is intentionally absent.
 - Next.js was bumped from 15.3.1 to 15.3.8 after Netlify blocked the first preview for CVE-2025-55182. This stays on the 15.3 line.
+- `/admin` returns 404. `/api/admin/*` returns 401 without a server-side `ADMIN_API_KEY`.
 - Resend is initialized only at request time from `RESEND_API_KEY` (no hardcoded key in application code).
 - A full live email send to `info@apcllc.co` was **not** performed from this environment so a customer mailbox was not spammed. Confirm one preview-environment test quote after Netlify deploys the branch.
 
@@ -58,4 +59,4 @@ Local QA on `feature/apc-modern-redesign` against a production build (`next star
 
 ## Preview
 
-- Netlify preview URL: *pending first branch deploy*
+- Netlify preview URL: https://deploy-preview-1--apcllc.netlify.app

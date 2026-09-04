@@ -120,16 +120,19 @@ const QuoteForm = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to send email');
+      const result = await response.json().catch(() => ({}));
+      if (response.ok) {
+        setSubmitSuccess(true);
+        reset();
+        return;
       }
-      setSubmitSuccess(true);
-      reset();
-    } catch (error) {
-      console.error('Form submission error:', error);
+      if (response.status === 400 || response.status === 429) {
+        setSubmitError(result.error || 'Please check the form and try again.');
+        return;
+      }
       handleDirectEmailSending(data);
-      return;
+    } catch {
+      handleDirectEmailSending(data);
     } finally {
       inFlight.current = false;
       setIsSubmitting(false);
