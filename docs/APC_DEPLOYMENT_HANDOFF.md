@@ -34,7 +34,9 @@ These already match production and were not rewritten in the Netlify UI:
 | Next.js | 15.3.8 (patched for CVE-2025-55182; Netlify blocks 15.3.1) |
 | Redirect | `/lander` → `/` 301 |
 
-`public/_redirects` no longer includes a CRA-style `/* /index.html 200` catch-all. Next.js plus the Netlify plugin handles routing. The `/lander` redirect remains.
+`public/_redirects` no longer includes a CRA-style `/* /index.html 200` catch-all. The old `/api/*` → `/.netlify/functions/api/:splat` force rewrite was removed because the current Next.js runtime serves API routes through the server handler; keeping that rewrite 404s quote and contact POSTs on new deploys. The `/lander` redirect remains.
+
+**Before merging:** confirm `RESEND_API_KEY`, `DATABASE_URL`, and `ADMIN_API_KEY` are set in the Netlify UI. Secret values were removed from `netlify.toml` so GitHub push protection would allow the API-routing fix. If those names exist only in git and not in the Netlify UI, Resend email will not send until they are added in the UI.
 
 ---
 

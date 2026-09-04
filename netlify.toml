@@ -7,43 +7,27 @@
   NODE_VERSION = "18"
   NPM_VERSION = "9"
   NETLIFY_NEXT_PLUGIN_SKIP = "false"
-  RESEND_API_KEY = "re_QQwPHVih_BPqM2kAD4LZ7xEGyuPequ6bA"
-  # Database URL for Postgres with pooler format for IPv4 compatibility
-  DATABASE_URL = "postgres://postgres.nvmtjzdgpwwgfkxitcvs:Apcllc2025%24%24@aws-0-us-east-1.pooler.supabase.com:5432/postgres"
-  # Admin API key for secure API access
-  ADMIN_API_KEY = "apcllc2024adminapi"
-  # Metadata base for Next.js
   NEXT_PUBLIC_METADATA_BASE_URL = "https://apcllc.co"
-  # Disable type checking during build
   TYPESCRIPT_SKIP_TYPECHECK = "true"
   CI = "false"
+  # Keep these names in the Netlify UI only. Do not put secret values in git:
+  # RESEND_API_KEY, DATABASE_URL, ADMIN_API_KEY
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Configure functions
 [functions]
-  # Set the directory for Netlify Functions (used for API routes)
   directory = ".netlify/functions-internal"
-  # Set timeout to 30 seconds for longer database operations
   node_bundler = "esbuild"
 
-# Redirect /lander to homepage
 [[redirects]]
   from = "/lander"
   to = "/"
   status = 301
   force = true
 
-# Add redirects for API routes
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
-  force = true
-
 [dev]
   command = "npm run dev"
   port = 4000
   targetPort = 4000
-  framework = "next" 
+  framework = "next"
