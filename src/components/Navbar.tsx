@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FiMenu, FiX, FiPhone } from 'react-icons/fi';
 import { NAV_LINKS, SITE, telHref } from '@/lib/site';
+import LogoMark from '@/components/LogoMark';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,16 +22,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-navy/95 text-white backdrop-blur">
       <div className="container-custom flex items-center justify-between py-3">
         <Link href="/" className="flex items-center gap-3" onClick={closeMenu}>
-          <div className="relative h-12 w-12 overflow-hidden bg-navy">
-            <Image
-              src="/APCLLC.jpeg"
-              alt="APC LLC cargo van logo"
-              fill
-              sizes="48px"
-              className="object-contain"
-              priority
-            />
-          </div>
+          <LogoMark className="h-12 w-12" sizes="48px" priority />
           <span className="headline text-2xl">
             <span className="text-primary">APC</span>{' '}
             <span className="text-accent">LLC</span>

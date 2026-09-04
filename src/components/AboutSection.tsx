@@ -1,21 +1,17 @@
 import { FiShield, FiTruck, FiUsers } from 'react-icons/fi';
-import Image from 'next/image';
 import { SITE } from '@/lib/site';
+import LogoMark from '@/components/LogoMark';
 
 const AboutSection = () => {
   return (
     <section className="bg-white py-12 md:py-20">
       <div className="container-custom grid items-center gap-12 md:grid-cols-2">
         <div className="flex justify-center bg-navy p-6">
-          <div className="relative aspect-square w-full max-w-md">
-            <Image
-              src="/APCLLC.jpeg"
-              alt="APC LLC logo"
-              fill
-              className="object-contain"
-              sizes="(max-width: 768px) 100vw, 500px"
-            />
-          </div>
+          <LogoMark
+            className="aspect-square w-full max-w-md"
+            sizes="(max-width: 768px) 100vw, 500px"
+            alt="APC LLC logo"
+          />
         </div>
         <div>
           <h2 className="headline mb-6 text-3xl text-navy md:text-4xl">About APC LLC</h2>

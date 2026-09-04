@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { SITE, telHref } from '@/lib/site';
 import QuoteStarter from '@/components/QuoteStarter';
+import LogoMark from '@/components/LogoMark';
 
 const Hero = () => {
   const reduceMotion = useReducedMotion();
@@ -51,18 +51,12 @@ const Hero = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: reduceMotion ? 0 : 0.5, delay: reduceMotion ? 0 : 0.1 }}
         >
-          <div className="mx-auto aspect-square max-w-md bg-navy-deep p-6">
-            <div className="relative h-full w-full">
-              <Image
-                src="/APCLLC.jpeg"
-                alt="APC LLC logo showing a cargo van in motion"
-                fill
-                sizes="(max-width: 768px) 90vw, 420px"
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
+          <LogoMark
+            className="mx-auto aspect-square w-full max-w-md"
+            sizes="(max-width: 768px) 90vw, 420px"
+            priority
+            alt="APC LLC logo showing a cargo van in motion"
+          />
         </motion.div>
       </div>
       <QuoteStarter />

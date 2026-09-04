@@ -1,6 +1,6 @@
 // Service Worker for APC LLC Website
 
-const CACHE_NAME = 'apcllc-cache-v2';
+const CACHE_NAME = 'apcllc-cache-v3';
 const urlsToCache = [
   '/',
   '/about',
@@ -10,6 +10,7 @@ const urlsToCache = [
   '/services/junk-removal',
   '/contact',
   '/quote',
+  '/APCLLC.png',
   '/APCLLC.jpeg',
   '/manifest.json',
   '/offline.html',

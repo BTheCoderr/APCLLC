@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { FiMapPin, FiMail, FiPhone, FiInstagram, FiFacebook, FiTwitter, FiLinkedin } from 'react-icons/fi';
 import { FOOTER_LINKS, SITE, mailHref, telHref } from '@/lib/site';
+import LogoMark from '@/components/LogoMark';
 
 const Footer = () => {
   return (
@@ -10,15 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
           <div>
             <div className="mb-4 flex items-center gap-3">
-              <div className="relative h-14 w-14 overflow-hidden bg-navy">
-                <Image
-                  src="/APCLLC.jpeg"
-                  alt="APC LLC logo"
-                  fill
-                  sizes="56px"
-                  className="object-contain"
-                />
-              </div>
+              <LogoMark className="h-14 w-14" sizes="56px" alt="APC LLC logo" />
               <h2 className="headline text-2xl">
                 <span className="text-primary">APC</span>{' '}
                 <span className="text-accent">LLC</span>

@@ -17,7 +17,7 @@ Do **not** drop in stock vans, stock teams, or fake customer photos.
 ## Other assets
 
 - True 180 / 192 / 512 PNG icons. Current PWA icons are the JPEG logo saved with `.png` names.
-- A transparent-background logo if a cleaner nav mark is desired. Until then, keep `APCLLC.jpeg`.
+- Transparent logo for on-site chrome: `public/APCLLC.png`. Keep `public/APCLLC.jpeg` for Open Graph, favicon, and JSON-LD (social cards need an opaque image).
 - Any authentic reviews the business wants published, with customer permission. None were found in the repo.
 
 Place new images in `/public` and replace the `PhotoPlaceholder` components on the homepage, about page, and service pages.
