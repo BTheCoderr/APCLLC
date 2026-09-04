@@ -1,154 +1,89 @@
-import Navbar from "@/components/Navbar";
-import Services from "@/components/Services";
-import CTASection from "@/components/CTASection";
-import Footer from "@/components/Footer";
-import Link from "next/link";
-import { FiArrowRight } from "react-icons/fi";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import SiteShell from '@/components/SiteShell';
+import PageHero from '@/components/PageHero';
+import Services from '@/components/Services';
+import CTASection from '@/components/CTASection';
+import { SITE } from '@/lib/site';
 
-export const metadata = {
-  title: "Our Services | All Purpose Contractors LLC",
-  description: "Explore our cargo van transport and moving services including residential moving, freight transport, junk removal, and more.",
+export const metadata: Metadata = {
+  title: 'Cargo Van Services in Rhode Island',
+  description:
+    'Business delivery, cargo van transport, and local junk removal from All Purpose Contractors LLC in Warwick, Rhode Island.',
+  alternates: { canonical: `${SITE.domain}/services` },
 };
+
+const details = [
+  {
+    href: '/services/business-delivery',
+    title: 'Business Delivery',
+    copy: 'Recurring and one-off cargo van deliveries for retailers, contractors, property managers, offices, warehouses, furniture businesses, and e-commerce operators.',
+    points: [
+      'Scheduled and same-day windows when available',
+      'B2B transfers and inventory moves',
+      'E-commerce overflow and returns',
+      'Dedicated van instead of mixed LTL handling',
+    ],
+  },
+  {
+    href: '/services/cargo-van-transport',
+    title: 'Cargo Van Transport',
+    copy: 'Interstate property transport in a high-roof cargo van for freight that does not need a tractor-trailer.',
+    points: [
+      'Rhode Island origin with continental U.S. destinations',
+      'Boxes, appliances, and palletized property that fits the van',
+      'Direct operator communication',
+      'Quoted from distance, access, and load—not instant online rates',
+    ],
+  },
+  {
+    href: '/services/junk-removal',
+    title: 'Junk Removal and Hauling',
+    copy: 'Local junk removal and hauling around Rhode Island. This is debris and discard work, not a household-goods moving product.',
+    points: [
+      'Furniture and appliance haul-away',
+      'Cleanouts and post-renovation debris',
+      'Donation drop-off when items are usable',
+      'Scoped before the van is dispatched',
+    ],
+  },
+];
 
 export default function ServicesPage() {
   return (
-    <main className="min-h-screen">
-      <Navbar />
-      <div className="bg-secondary text-white py-16">
-        <div className="container-custom">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#c62a2a]">Our <span className="text-[#c62a2a]">Services</span></h1>
-          <p className="text-xl text-gray-300">
-            Professional cargo van transport and moving services for all your needs
+    <SiteShell>
+      <PageHero
+        title="Services"
+        description="Professional cargo van logistics for businesses and individuals, with residential moving kept limited and clearly separate."
+      />
+      <Services />
+      <section className="bg-white py-16">
+        <div className="container-custom space-y-10">
+          <h2 className="headline text-3xl text-navy md:text-4xl">Service details</h2>
+          {details.map((service) => (
+            <article key={service.href} className="border border-navy/10 bg-paper p-8">
+              <h3 className="headline mb-4 text-2xl text-navy">{service.title}</h3>
+              <p className="mb-6 text-muted">{service.copy}</p>
+              <ul className="mb-6 grid gap-2 md:grid-cols-2">
+                {service.points.map((point) => (
+                  <li key={point} className="text-navy">
+                    {point}
+                  </li>
+                ))}
+              </ul>
+              <Link href={service.href} className="font-semibold text-primary hover:underline">
+                Learn more
+              </Link>
+            </article>
+          ))}
+          <p className="max-w-3xl text-sm text-muted">
+            Local residential hauling may be quoted when the load fits a cargo van. APC does not
+            offer interstate household-goods moving. Authority: USDOT {SITE.usdot}, MC {SITE.mc},
+            motor carrier of property, except household goods.
           </p>
         </div>
-      </div>
-      <Services />
-      
-      <section className="section bg-white">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#c62a2a]">Service Details</h2>
-            <p className="text-lg text-gray-600 max-w-4xl mx-auto">
-              Learn more about what each of our specialized services includes
-            </p>
-          </div>
-          
-          <div className="space-y-12">
-            <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
-              <h3 className="text-2xl font-bold mb-4 text-[#d4b14b]">Residential Moving Services</h3>
-              <p className="text-gray-700 mb-6">
-                Our residential moving services are perfect for apartments, small homes, and studio moves
-                nationwide. We provide:
-              </p>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Professional loading and unloading</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Careful handling of furniture and boxes</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Efficient moves with fast turnaround</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">24/7 scheduling options</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Specialized handling for fragile items</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Student and senior discounts available</span>
-                </li>
-              </ul>
-              <Link href="/quote" className="inline-flex items-center text-[#c62a2a] font-semibold hover:underline">
-                Get a quote for your move <FiArrowRight className="ml-2" />
-              </Link>
-            </div>
-            
-            <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
-              <h3 className="text-2xl font-bold mb-4 text-[#d4b14b]">Cargo Van Freight Transport</h3>
-              <p className="text-gray-700 mb-6">
-                Our cargo van transport services are ideal for businesses and individuals needing reliable 
-                delivery of goods and items including palletized freight requirements:
-              </p>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Business-to-business deliveries</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Furniture and appliance transport</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Urgent/same-day delivery options</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Scheduled recurring deliveries</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Inventory and stock transfers</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">E-commerce returns and exchanges</span>
-                </li>
-              </ul>
-              <Link href="/quote" className="inline-flex items-center text-[#c62a2a] font-semibold hover:underline">
-                Request freight transport <FiArrowRight className="ml-2" />
-              </Link>
-            </div>
-            
-            <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
-              <h3 className="text-2xl font-bold mb-4 text-[#d4b14b]">Junk Removal & Hauling</h3>
-              <p className="text-gray-700 mb-6">
-                Clear out unwanted items with our efficient junk removal and hauling services:
-              </p>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Household junk and clutter removal</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Furniture and appliance disposal</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Yard waste and debris hauling</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Post-renovation cleanup</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Responsible disposal practices</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">✓</span>
-                  <span className="text-gray-700">Donation drop-offs for usable items</span>
-                </li>
-              </ul>
-              <Link href="/quote" className="inline-flex items-center text-[#c62a2a] font-semibold hover:underline">
-                Book junk removal <FiArrowRight className="ml-2" />
-              </Link>
-            </div>
-          </div>
-        </div>
       </section>
-      
       <CTASection />
-      <Footer />
-    </main>
+    </SiteShell>
   );
-} 
+}

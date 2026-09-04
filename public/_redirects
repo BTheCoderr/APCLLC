@@ -1,6 +1,3 @@
 # Netlify redirects file
-# Redirect /lander to homepage 
+# Keep the existing lander shortcut. App routing is handled by Next.js + @netlify/plugin-nextjs.
 /lander    /    301
-
-# Redirect all routes to the index.html file for client-side routing
-/*    /index.html   200 

@@ -1,86 +1,36 @@
-'use client';
-
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { FiPhone, FiCalendar } from 'react-icons/fi';
+import { FiPhone, FiMessageSquare, FiFileText } from 'react-icons/fi';
+import { SITE, smsHref, telHref } from '@/lib/site';
 
 const CTASection = () => {
   return (
-    <section className="bg-secondary text-white">
-      <div className="container-custom py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Get Your Items <span className="text-accent">Moving?</span>
-            </h2>
-            <p className="text-xl mb-6 text-gray-300">
-              Contact us today for reliable cargo van transport and moving services across the United States.
-            </p>
-            <ul className="space-y-3 mb-8">
-              <li className="flex items-start">
-                <span className="mr-2 text-[#c62a2a]">✓</span>
-                <span>Fast, affordable deliveries</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-[#c62a2a]">✓</span>
-                <span>Professional, insured service</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-[#c62a2a]">✓</span>
-                <span>Same-day scheduling available</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2 text-[#c62a2a]">✓</span>
-                <span>Serving all of the US</span>
-              </li>
-            </ul>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-gray-900/80 backdrop-blur-sm p-8 rounded-lg shadow-xl border border-gray-800"
-          >
-            <h3 className="text-2xl font-bold mb-6 text-center text-[#d4b14b]">Get In Touch</h3>
-            <div className="space-y-6">
-              <div className="flex flex-col items-center">
-                <Link 
-                  href="tel:+14016024943"
-                  className="flex items-center justify-center w-full py-3 px-6 bg-[#c62a2a] hover:bg-[#a52222] text-white rounded-md transition-colors font-semibold"
-                >
-                  <FiPhone className="mr-2" />
-                  Call Us Now: (401) 602-4943
-                </Link>
-                <p className="mt-2 text-sm text-gray-400">
-                  Available 24/7, we never close!
-                </p>
-              </div>
-              
-              <div className="flex flex-col items-center">
-                <Link 
-                  href="/quote"
-                  className="flex items-center justify-center w-full py-3 px-6 bg-accent hover:bg-accent-dark text-white rounded-md transition-colors font-semibold"
-                >
-                  <FiCalendar className="mr-2" />
-                  Schedule a Booking
-                </Link>
-                <p className="mt-2 text-sm text-gray-400">
-                  Get a free quote for your delivery needs
-                </p>
-              </div>
-            </div>
-          </motion.div>
+    <section className="bg-navy py-16 text-white md:py-20">
+      <div className="container-custom">
+        <h2 className="headline mb-4 text-4xl md:text-5xl">Need it moved today?</h2>
+        <p className="mb-8 max-w-2xl text-lg text-white/80">
+          Tell us what you&apos;re moving and where it needs to go. We&apos;ll respond with
+          availability and pricing.
+        </p>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Link href="/quote" className="btn-primary">
+            <FiFileText aria-hidden />
+            Request a Quote
+          </Link>
+          <Link href={telHref()} className="btn-secondary">
+            <FiPhone aria-hidden />
+            Call Now
+          </Link>
+          <Link href={smsHref()} className="btn-ghost">
+            <FiMessageSquare aria-hidden />
+            Text APC
+          </Link>
         </div>
+        <p className="mt-6 text-sm text-white/60">
+          Same-day service is quoted when the van is available. {SITE.phoneDisplay} · {SITE.email}
+        </p>
       </div>
     </section>
   );
 };
 
-export default CTASection; 
+export default CTASection;

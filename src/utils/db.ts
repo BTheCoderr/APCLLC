@@ -1,29 +1,29 @@
-import postgres from 'postgres';
+type QueryResult = Record<string, unknown>[];
 
-// Mock SQL client that doesn't actually connect to the database
-// This is a temporary solution until the database connection issues are resolved
-
-// Create a fake SQL client that always succeeds but doesn't actually connect
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/ban-types
-const sql: postgres.Sql<{}> = (strings: TemplateStringsArray | string, ...values: unknown[]) => {
-  console.log('Database operation simulated (not actually connecting)');
-  // Return a promise that resolves to an empty array
-  return Promise.resolve([]);
+type SqlClient = {
+  (strings: TemplateStringsArray | string, ...values: unknown[]): Promise<QueryResult>;
+  safeQuery: (
+    strings: TemplateStringsArray | string,
+    ...values: unknown[]
+  ) => Promise<QueryResult>;
 };
 
-// Add a safeQuery method that logs the operation but doesn't actually connect
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-sql.safeQuery = async (strings: TemplateStringsArray | string, ...values: unknown[]) => {
-  console.log('Safe database operation simulated (not actually connecting)');
-  // For insert operations that return an ID, simulate a success response
+const runMockQuery = async (
+  strings: TemplateStringsArray | string
+): Promise<QueryResult> => {
   const query = typeof strings === 'object' ? strings[0] || '' : strings;
   if (typeof query === 'string' && query.toLowerCase().includes('insert')) {
-    // Simulate an ID return for insert operations
-    return [{ id: 'mock-' + Date.now() }];
+    return [{ id: `mock-${Date.now()}` }];
   }
-  // Return an empty array for other operations
   return [];
 };
 
-// Export the mock SQL client
-export default sql; 
+const sql = ((strings: TemplateStringsArray | string, ..._values: unknown[]) => {
+  return runMockQuery(strings);
+}) as SqlClient;
+
+sql.safeQuery = async (strings: TemplateStringsArray | string, ..._values: unknown[]) => {
+  return runMockQuery(strings);
+};
+
+export default sql;

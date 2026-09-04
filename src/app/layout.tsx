@@ -1,56 +1,76 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Oswald, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import RegisterSW from "@/components/RegisterSW";
+import JsonLd from "@/components/JsonLd";
+import { SITE } from "@/lib/site";
 
-const inter = Inter({
+const oswald = Oswald({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-oswald",
+  display: "swap",
+});
+
+const sourceSans = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-source-sans",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "APC LLC | Cargo Van Delivery & Moving Services in Rhode Island",
-  description: "Professional cargo van transport and moving services in Rhode Island and nationwide. Fast, reliable, and affordable delivery solutions.",
-  keywords: "cargo van, delivery, moving services, Rhode Island, transport, hauling, freight, local moving, APC LLC, All Purpose Contractors",
+  title: {
+    default: "APC LLC | Cargo Van Delivery from Rhode Island",
+    template: "%s | APC LLC",
+  },
+  description:
+    "Owner-operated cargo van logistics from Warwick, Rhode Island. Same-day, scheduled, and long-distance property transport across the continental U.S.",
+  keywords:
+    "cargo van delivery, Rhode Island, Warwick, Providence, same-day delivery, business delivery, interstate property transport, junk removal, APC LLC, All Purpose Contractors",
   manifest: "/manifest.json",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_METADATA_BASE_URL || 'https://apcllc.co'),
-  authors: [{ name: "All Purpose Contractors LLC" }],
-  creator: "All Purpose Contractors LLC",
-  publisher: "All Purpose Contractors LLC",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_METADATA_BASE_URL || SITE.domain),
+  authors: [{ name: SITE.legalName }],
+  creator: SITE.legalName,
+  publisher: SITE.legalName,
   category: "Transportation",
   formatDetection: {
     telephone: true,
     email: true,
-    address: true,
+    address: false,
   },
   openGraph: {
-    title: "APC LLC | Cargo Van Delivery & Moving Services",
-    description: "Professional cargo van transport and moving services in Rhode Island.",
-    url: "https://apcllc.co",
-    siteName: "All Purpose Contractors LLC",
+    title: "APC LLC | Cargo Van Delivery from Rhode Island",
+    description: SITE.tagline,
+    url: SITE.domain,
+    siteName: SITE.legalName,
     locale: "en_US",
     type: "website",
     images: [
       {
         url: "/APCLLC.jpeg",
-        width: 600,
-        height: 600,
-        alt: "APC LLC Logo"
-      }
-    ]
+        width: 512,
+        height: 512,
+        alt: "APC LLC logo with cargo van",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "APC LLC | Cargo Van Delivery & Moving Services",
-    description: "Professional cargo van transport and moving services in Rhode Island.",
-    images: ["/APCLLC.jpeg"]
-  }
+    title: "APC LLC | Cargo Van Delivery from Rhode Island",
+    description: SITE.tagline,
+    images: ["/APCLLC.jpeg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: SITE.domain,
+  },
 };
 
 export const viewport = {
-  themeColor: "#c62a2a",
+  themeColor: "#0B1220",
   width: "device-width",
   initialScale: 1,
 };
@@ -63,19 +83,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="application-name" content="APC LLC" />
+        <meta name="application-name" content={SITE.shortName} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="APC LLC" />
-        <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content={SITE.shortName} />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#c62a2a" />
         <link rel="apple-touch-icon" href="/icons/apple-icon-180.png" />
         <link rel="icon" href="/APCLLC.jpeg" type="image/jpeg" />
         <link rel="shortcut icon" href="/APCLLC.jpeg" type="image/jpeg" />
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover" />
       </head>
-      <body className={`${inter.variable} font-sans antialiased`} suppressHydrationWarning>
+      <body
+        className={`${oswald.variable} ${sourceSans.variable} font-sans antialiased has-mobile-bar`}
+      >
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
+        <JsonLd />
         <RegisterSW />
         {children}
       </body>

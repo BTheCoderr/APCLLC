@@ -40,7 +40,7 @@ export async function GET(request: Request) {
     
     // Count total rows for pagination
     const countResult = await sql`SELECT COUNT(*) FROM contact_submissions`;
-    const total = parseInt(countResult[0].count);
+    const total = parseInt(String(countResult[0]?.count ?? 0), 10);
     
     return NextResponse.json({
       submissions,

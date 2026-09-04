@@ -1,110 +1,70 @@
-'use client';
+import Link from 'next/link';
+import { FiBriefcase, FiTruck, FiTrash2 } from 'react-icons/fi';
 
-import { FiHome, FiPackage, FiTrash2, FiShoppingBag, FiMapPin, FiTruck } from 'react-icons/fi';
-import { motion } from 'framer-motion';
-
-const services = [
+const cards = [
   {
-    id: 1,
-    title: 'Residential Moving Services',
-    description: 'Local and long-distance moving services for homes and apartments across the US.',
-    icon: <FiHome size={36} className="text-[#c62a2a]" />,
-    soon: false
+    title: 'Business Delivery',
+    description:
+      'Same-day and recurring cargo van routes for retailers, contractors, offices, warehouses, and e-commerce operators who need dependable property transport.',
+    href: '/services/business-delivery',
+    cta: 'Plan a delivery route',
+    icon: FiBriefcase,
   },
   {
-    id: 2,
-    title: 'Cargo Van Freight Transport',
-    description: 'Reliable transport for boxes, appliances, and palletized cargo.',
-    icon: <FiPackage size={36} className="text-[#c62a2a]" />,
-    soon: false
+    title: 'Cargo Van Transport',
+    description:
+      'Dedicated high-roof cargo van capacity for freight, appliances, boxes, and palletized property from Rhode Island to destinations across the continental U.S.',
+    href: '/services/cargo-van-transport',
+    cta: 'Request van transport',
+    icon: FiTruck,
   },
   {
-    id: 3,
-    title: 'Junk Removal & Hauling',
-    description: 'Fast and efficient removal of unwanted items and debris.',
-    icon: <FiTrash2 size={36} className="text-[#c62a2a]" />,
-    soon: false
+    title: 'Junk Removal and Hauling',
+    description:
+      'Local junk removal and hauling for debris, discarded furniture, and cleanouts. Practical, scheduled, and clearly scoped before pickup.',
+    href: '/services/junk-removal',
+    cta: 'Book a haul',
+    icon: FiTrash2,
   },
-  {
-    id: 4,
-    title: 'Small Business & Retail Deliveries',
-    description: 'Custom delivery solutions for small businesses and retail operations.',
-    icon: <FiShoppingBag size={36} className="text-[#c62a2a]" />,
-    soon: false
-  },
-  {
-    id: 5,
-    title: 'Local Pickup & Drop-Off',
-    description: 'Convenient pickup and delivery services throughout the United States.',
-    icon: <FiMapPin size={36} className="text-[#c62a2a]" />,
-    soon: false
-  },
-  {
-    id: 6,
-    title: 'Interstate Transport',
-    description: 'Transportation services throughout the United States.',
-    icon: <FiTruck size={36} className="text-[#c62a2a]" />,
-    soon: false
-  }
 ];
-
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 }
-};
 
 const Services = () => {
   return (
-    <section className="py-12 md:py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#c62a2a]">Our <span className="text-[#c62a2a]">Services</span></h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            We specialize in extended high-roof cargo van capacity, perfect for light/heavy freight, 
-            boxes, appliances, and palletized cargo.
+    <section className="bg-paper py-16 md:py-24" id="services">
+      <div className="container-custom">
+        <div className="mb-12 max-w-3xl">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-primary">
+            Services
+          </p>
+          <h2 className="headline mb-4 text-4xl text-navy md:text-5xl">
+            Cargo van work that stays operational
+          </h2>
+          <p className="text-lg text-muted">
+            APC is an owner-operated cargo van logistics company. Residential moving is not the
+            lead service and interstate household-goods transportation is not offered.
           </p>
         </div>
-
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
-        >
-          {services.map((service) => (
-            <motion.div 
-              key={service.id} 
-              className="bg-white p-6 rounded-lg shadow-md relative overflow-hidden"
-              variants={item}
-            >
-              <div className="mb-4">
-                {service.icon}
-              </div>
-              <h3 className="text-xl font-bold mb-2 text-[#d4b14b]">{service.title}</h3>
-              <p className="text-gray-600">{service.description}</p>
-              
-              {service.soon && (
-                <div className="absolute top-4 right-4 bg-[#d4b14b] text-white text-xs font-bold px-3 py-1 rounded-full">
-                  Coming Soon
-                </div>
-              )}
-            </motion.div>
-          ))}
-        </motion.div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {cards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <article
+                key={card.title}
+                className="flex flex-col border border-navy/10 bg-white p-7 shadow-card"
+              >
+                <Icon className="mb-5 text-primary" size={32} aria-hidden />
+                <h3 className="headline mb-3 text-2xl text-navy">{card.title}</h3>
+                <p className="mb-6 flex-1 text-muted">{card.description}</p>
+                <Link href={card.href} className="font-semibold text-primary hover:underline">
+                  {card.cta}
+                </Link>
+              </article>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
 };
 
-export default Services; 
+export default Services;

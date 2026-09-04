@@ -165,8 +165,6 @@ const AdminDashboard = () => {
     }
   }, []);
 
-  // Fetch submissions whenever apiKey is set
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (apiKey) {
       fetchSubmissions();

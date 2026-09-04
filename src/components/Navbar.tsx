@@ -3,122 +3,105 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { FiMenu, FiX, FiPhone } from 'react-icons/fi';
+import { NAV_LINKS, SITE, telHref } from '@/lib/site';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
+
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    return pathname === href || pathname.startsWith(`${href}/`);
   };
 
   return (
-    <nav className="bg-[#000000] text-white shadow-md sticky top-0 z-50">
-      <div className="container-custom flex justify-between items-center py-3">
-        <Link href="/" className="flex items-center">
-          <div className="relative h-[50px] w-[50px] mr-2 overflow-hidden" style={{ backgroundColor: "#000000" }}>
-            <Image 
-              src="/APCLLC.jpeg" 
-              alt="APC LLC Logo" 
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-navy/95 text-white backdrop-blur">
+      <div className="container-custom flex items-center justify-between py-3">
+        <Link href="/" className="flex items-center gap-3" onClick={closeMenu}>
+          <div className="relative h-12 w-12 overflow-hidden bg-navy">
+            <Image
+              src="/APCLLC.jpeg"
+              alt="APC LLC cargo van logo"
               fill
-              sizes="50px"
-              className="object-contain" 
-              style={{ backgroundColor: "#000000" }}
+              sizes="48px"
+              className="object-contain"
+              priority
             />
           </div>
-          <div>
-            <span className="text-2xl font-bold"><span className="text-[#c62a2a]">APC</span> <span className="text-[#d4b14b]">LLC</span></span>
-          </div>
+          <span className="headline text-2xl">
+            <span className="text-primary">APC</span>{' '}
+            <span className="text-accent">LLC</span>
+          </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
-          <Link href="/" className="font-medium hover:text-[#d4b14b] transition-colors">
-            Home
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`text-sm font-semibold tracking-wide transition-colors hover:text-accent ${
+                isActive(link.href) ? 'text-accent' : 'text-white'
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="hidden items-center gap-4 lg:flex">
+          <Link href={telHref()} className="flex items-center gap-2 text-accent hover:text-white">
+            <FiPhone aria-hidden />
+            <span className="font-semibold">{SITE.phoneDisplay}</span>
           </Link>
-          <Link href="/about" className="font-medium hover:text-[#d4b14b] transition-colors">
-            About
-          </Link>
-          <Link href="/services" className="font-medium hover:text-[#d4b14b] transition-colors">
-            Services
-          </Link>
-          <Link href="/contact" className="font-medium hover:text-[#d4b14b] transition-colors">
-            Contact
-          </Link>
-          <Link href="/quote" className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-2 px-6 rounded-md transition-colors">
+          <Link href="/quote" className="btn-primary">
             Get a Quote
           </Link>
         </div>
 
-        {/* Phone button - always visible */}
-        <Link href="tel:+14016024943" className="hidden md:flex items-center text-[#d4b14b] hover:text-[#b99537] transition-colors">
-          <FiPhone className="mr-2" />
-          <span className="font-medium">Call Now</span>
-        </Link>
-
-        {/* Mobile menu button */}
-        <button 
-          className="md:hidden text-white p-2" 
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-          suppressHydrationWarning
+        <button
+          className="p-2 text-white lg:hidden"
+          onClick={() => setIsMenuOpen((open) => !open)}
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-nav"
         >
           {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
         </button>
       </div>
 
-      {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden bg-gray-900 py-4 px-4 shadow-inner">
-          <div className="flex flex-col space-y-4">
-            <Link 
-              href="/" 
-              className="font-medium hover:text-[#d4b14b] transition-colors py-2"
-              onClick={toggleMenu}
-            >
-              Home
-            </Link>
-            <Link 
-              href="/about" 
-              className="font-medium hover:text-[#d4b14b] transition-colors py-2"
-              onClick={toggleMenu}
-            >
-              About
-            </Link>
-            <Link 
-              href="/services" 
-              className="font-medium hover:text-[#d4b14b] transition-colors py-2"
-              onClick={toggleMenu}
-            >
-              Services
-            </Link>
-            <Link 
-              href="/contact" 
-              className="font-medium hover:text-[#d4b14b] transition-colors py-2"
-              onClick={toggleMenu}
-            >
-              Contact
-            </Link>
-            <Link 
-              href="/quote" 
-              className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-2 px-6 rounded-md transition-colors inline-block text-center"
-              onClick={toggleMenu}
-            >
+        <nav
+          id="mobile-nav"
+          className="border-t border-white/10 bg-navy-mid px-5 py-4 lg:hidden"
+          aria-label="Mobile"
+        >
+          <div className="flex flex-col gap-1">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="py-3 font-semibold hover:text-accent"
+                onClick={closeMenu}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Link href="/quote" className="btn-primary mt-2" onClick={closeMenu}>
               Get a Quote
             </Link>
-            <Link 
-              href="tel:+14016024943" 
-              className="flex items-center text-[#d4b14b] py-2"
-              onClick={toggleMenu}
-            >
-              <FiPhone className="mr-2" />
-              <span>Call Now</span>
+            <Link href={telHref()} className="btn-ghost mt-2" onClick={closeMenu}>
+              <FiPhone />
+              Call {SITE.phoneDisplay}
             </Link>
           </div>
-        </div>
+        </nav>
       )}
-    </nav>
+    </header>
   );
 };
 
-export default Navbar; 
+export default Navbar;
