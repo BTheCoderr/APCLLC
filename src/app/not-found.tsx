@@ -1,33 +1,20 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import LogoMark from '@/components/LogoMark';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4">
-      <div className="max-w-md w-full p-8 bg-zinc-900 rounded-lg shadow-xl text-center">
-        <div className="flex justify-center mb-6">
-          <div className="relative w-24 h-24">
-            <Image 
-              src="/APCLLC.jpeg" 
-              alt="APC LLC Logo" 
-              fill
-              className="object-contain"
-              style={{ backgroundColor: "#000000" }}
-            />
-          </div>
-        </div>
-        <h1 className="text-4xl font-bold text-[#c62a2a] mb-4">404</h1>
-        <h2 className="text-xl font-semibold text-white mb-6">Page Not Found</h2>
-        <p className="text-gray-400 mb-8">
-          The page you&apos;re looking for doesn&apos;t exist or has been moved.
+    <div className="flex min-h-screen items-center justify-center bg-navy px-4">
+      <div className="max-w-md p-8 text-center text-white">
+        <LogoMark className="mx-auto mb-6 h-24 w-24" sizes="96px" alt="APC LLC logo" />
+        <h1 className="headline mb-4 text-5xl text-primary">404</h1>
+        <h2 className="mb-4 text-xl font-semibold">Page not found</h2>
+        <p className="mb-8 text-white/70">
+          That URL does not exist. The main pages are Home, Services, About, Contact, and Quote.
         </p>
-        <Link
-          href="/"
-          className="bg-[#d4b14b] hover:bg-[#b99537] text-white font-semibold py-3 px-6 rounded-md transition-colors inline-block"
-        >
-          Return to Homepage
+        <Link href="/" className="btn-secondary">
+          Return to homepage
         </Link>
       </div>
     </div>
   );
-} 
+}

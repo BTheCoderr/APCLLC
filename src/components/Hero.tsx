@@ -1,70 +1,67 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import { SITE, telHref } from '@/lib/site';
+import QuoteStarter from '@/components/QuoteStarter';
+import LogoMark from '@/components/LogoMark';
 
 const Hero = () => {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <div className="bg-[#000000] text-white">
-      <div className="container-custom py-16 md:py-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center mb-6">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                <span className="text-[#c62a2a]">ALL PURPOSE</span> <span className="text-[#d4b14b]">CONTRACTORS</span>
-              </h1>
-            </div>
-            <p className="text-xl md:text-2xl mb-4">
-              <span className="text-[#c62a2a] font-bold">Reliable Cargo Van Delivery</span> & <span className="text-[#d4b14b] font-bold">Moving Services</span>
-            </p>
-            <p className="text-xl mb-6 text-gray-300">
-              Serving the Entire United States
-            </p>
-            <p className="text-lg mb-8">
-              Fast, Professional, 24/7 Hauling with a Personal Touch
-            </p>
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <Link href="/quote" className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-3 px-8 rounded-md transition-colors">
-                Get a Quote
-              </Link>
-              <Link href="/contact" className="bg-[#d4b14b] hover:bg-[#b99537] text-white font-semibold py-3 px-8 rounded-md transition-colors">
-                Contact Us
-              </Link>
-            </div>
-          </motion.div>
-          
-          <motion.div 
-            className="hidden md:block"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="w-full aspect-square flex items-center justify-center bg-[#000000]">
-              <div className="relative w-[80%] h-[80%]">
-                <Image 
-                  src="/APCLLC.jpeg" 
-                  alt="APC LLC Logo with cargo van" 
-                  fill
-                  sizes="(max-width: 768px) 100vw, 500px"
-                  className="object-contain" 
-                  priority
-                  style={{ 
-                    objectFit: "contain",
-                    backgroundColor: "#000000"
-                  }}
-                />
-              </div>
-            </div>
-          </motion.div>
-        </div>
+    <section className="relative overflow-hidden bg-navy text-white">
+      <div className="route-lines pointer-events-none absolute inset-0 opacity-80" aria-hidden />
+      <div className="container-custom relative grid items-center gap-12 py-16 md:grid-cols-[1.1fr_0.9fr] md:py-24">
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.45 }}
+        >
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-accent">
+            Owner-operated cargo van logistics
+          </p>
+          <h1 className="headline mb-6 text-5xl md:text-6xl lg:text-7xl">
+            Your Freight.
+            <br />
+            Our Van.
+            <br />
+            <span className="text-primary">Delivered.</span>
+          </h1>
+          <p className="mb-8 max-w-xl text-lg text-white/80 md:text-xl">
+            Same-day, scheduled, and long-distance cargo van delivery for businesses and
+            individuals. Based in Rhode Island and operating across the continental U.S.
+          </p>
+          <div className="mb-8 flex flex-col gap-3 sm:flex-row">
+            <Link href="#quote-starter" className="btn-primary">
+              Get My Quote
+            </Link>
+            <Link href={telHref()} className="btn-ghost">
+              Call {SITE.phoneDisplay}
+            </Link>
+          </div>
+          <p className="max-w-xl text-xs font-medium uppercase leading-relaxed tracking-wide text-white/70 sm:text-sm">
+            Available 24/7 • Fully Insured • USDOT {SITE.usdot} • MC {SITE.mc}
+          </p>
+        </motion.div>
+
+        <motion.div
+          className="relative"
+          initial={reduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: reduceMotion ? 0 : 0.5, delay: reduceMotion ? 0 : 0.1 }}
+        >
+          <LogoMark
+            className="mx-auto aspect-square w-full max-w-md"
+            sizes="(max-width: 768px) 90vw, 420px"
+            priority
+            alt="APC LLC logo showing a cargo van in motion"
+          />
+        </motion.div>
       </div>
-    </div>
+      <QuoteStarter />
+    </section>
   );
 };
 
-export default Hero; 
+export default Hero;

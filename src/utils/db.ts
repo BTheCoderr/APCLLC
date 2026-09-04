@@ -1,29 +1,72 @@
-import postgres from 'postgres';
+import postgres from "postgres";
 
-// Mock SQL client that doesn't actually connect to the database
-// This is a temporary solution until the database connection issues are resolved
+type QueryResult = Record<string, unknown>[];
 
-// Create a fake SQL client that always succeeds but doesn't actually connect
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/ban-types
-const sql: postgres.Sql<{}> = (strings: TemplateStringsArray | string, ...values: unknown[]) => {
-  console.log('Database operation simulated (not actually connecting)');
-  // Return a promise that resolves to an empty array
-  return Promise.resolve([]);
+export type SqlClient = {
+  (strings: TemplateStringsArray | string, ...values: unknown[]): Promise<QueryResult>;
+  safeQuery: (
+    strings: TemplateStringsArray | string,
+    ...values: unknown[]
+  ) => Promise<QueryResult>;
 };
 
-// Add a safeQuery method that logs the operation but doesn't actually connect
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-sql.safeQuery = async (strings: TemplateStringsArray | string, ...values: unknown[]) => {
-  console.log('Safe database operation simulated (not actually connecting)');
-  // For insert operations that return an ID, simulate a success response
-  const query = typeof strings === 'object' ? strings[0] || '' : strings;
-  if (typeof query === 'string' && query.toLowerCase().includes('insert')) {
-    // Simulate an ID return for insert operations
-    return [{ id: 'mock-' + Date.now() }];
-  }
-  // Return an empty array for other operations
+const runMockQuery = async (
+  _strings?: TemplateStringsArray | string,
+  ..._values: unknown[]
+): Promise<QueryResult> => {
   return [];
 };
 
-// Export the mock SQL client
-export default sql; 
+function createMockSql(): SqlClient {
+  const sql = ((strings: TemplateStringsArray | string, ...values: unknown[]) => {
+    return runMockQuery(strings, ...values);
+  }) as SqlClient;
+
+  sql.safeQuery = async (strings: TemplateStringsArray | string, ...values: unknown[]) => {
+    return runMockQuery(strings, ...values);
+  };
+
+  return sql;
+}
+
+function createPostgresSql(databaseUrl: string): SqlClient {
+  const client = postgres(databaseUrl, {
+    ssl: "require",
+    max: 1,
+    idle_timeout: 20,
+    connect_timeout: 8,
+  });
+
+  const query = async (
+    strings: TemplateStringsArray | string,
+    ...values: unknown[]
+  ): Promise<QueryResult> => {
+    if (typeof strings === "string") return [];
+    const rows = await (client as unknown as (
+      strings: TemplateStringsArray,
+      ...values: unknown[]
+    ) => Promise<QueryResult>)(strings, ...values);
+    return rows;
+  };
+
+  const sql = ((strings: TemplateStringsArray | string, ...values: unknown[]) => {
+    return query(strings, ...values);
+  }) as SqlClient;
+
+  sql.safeQuery = async (strings: TemplateStringsArray | string, ...values: unknown[]) => {
+    try {
+      return await query(strings, ...values);
+    } catch {
+      console.error("Database query failed");
+      return [];
+    }
+  };
+
+  return sql;
+}
+
+const sql: SqlClient = process.env.DATABASE_URL
+  ? createPostgresSql(process.env.DATABASE_URL)
+  : createMockSql();
+
+export default sql;

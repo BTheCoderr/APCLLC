@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { SITE, mailHref, telHref } from '@/lib/site';
 
 type FormData = {
   name: string;
@@ -14,190 +15,187 @@ const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  
+  const inFlight = useRef(false);
+
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm<FormData>();
 
-  // Function to handle direct email preparation as fallback
   const handleDirectEmailSending = (data: FormData) => {
     try {
-      // Create mailto link with form data
       const subject = encodeURIComponent(`Contact Form Submission from ${data.name}`);
       const body = encodeURIComponent(
         `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\n\nMessage:\n${data.message}`
       );
-      
-      // Open default email client using a link element
       const tempLink = document.createElement('a');
-      tempLink.href = `mailto:info@apcllc.co?subject=${subject}&body=${body}`;
+      tempLink.href = `mailto:${SITE.email}?subject=${subject}&body=${body}`;
       document.body.appendChild(tempLink);
       tempLink.click();
       document.body.removeChild(tempLink);
-      
-      // Mark as successful and reset the form
       setSubmitSuccess(true);
       reset();
     } catch (error) {
-      setSubmitError('There was a problem preparing your email. Please try again or contact us directly.');
+      setSubmitError('There was a problem preparing your email. Please call APC directly.');
       console.error('Email preparation error:', error);
     } finally {
+      inFlight.current = false;
       setIsSubmitting(false);
     }
   };
 
   const onSubmit = async (data: FormData) => {
+    if (inFlight.current) return;
+    inFlight.current = true;
+    setIsSubmitting(true);
+    setSubmitError('');
+
     try {
-      setIsSubmitting(true);
-      setSubmitError('');
-      
-      // First try sending via the API
       const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to send email');
+      const result = await response.json().catch(() => ({}));
+      if (response.ok) {
+        setSubmitSuccess(true);
+        reset();
+        return;
       }
-
-      // If successful
-      setSubmitSuccess(true);
-      reset();
-    } catch (error) {
-      console.error('Form submission error:', error);
-      
-      // If API fails, fall back to direct email
+      if (response.status === 400 || response.status === 429) {
+        setSubmitError(result.error || 'Please check the form and try again.');
+        return;
+      }
+      handleDirectEmailSending(data);
+    } catch {
       handleDirectEmailSending(data);
     } finally {
+      inFlight.current = false;
       setIsSubmitting(false);
     }
   };
 
+  const fieldClass = (invalid?: boolean) =>
+    `w-full rounded-sm border px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary ${
+      invalid ? 'border-red-500' : 'border-navy/20'
+    }`;
+
+  if (submitSuccess) {
+    return (
+      <div className="bg-white p-6 shadow-card md:p-8" role="status" aria-live="polite">
+        <h3 className="headline mb-4 text-3xl text-navy">Message sent</h3>
+        <p className="mb-6 text-muted">
+          Thank you. APC will get back to you as soon as possible. For urgent freight, call or text.
+        </p>
+        <a className="btn-primary mb-3" href={telHref()}>
+          Call {SITE.phoneDisplay}
+        </a>
+        <button className="mt-4 block font-semibold text-primary" onClick={() => setSubmitSuccess(false)}>
+          Send another message
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      {submitSuccess ? (
-        <div className="text-center py-8">
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Message Sent!</h3>
-          <p className="text-gray-600 mb-6">
-            Thank you for your message. We'll get back to you as soon as possible.
-          </p>
-          <button
-            className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-2 px-6 rounded-md transition-colors"
-            onClick={() => setSubmitSuccess(false)}
-            suppressHydrationWarning
-          >
-            Send Another Message
-          </button>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
-              Full Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#c62a2a] ${
-                errors.name ? 'border-red-500' : 'border-gray-300'
-              }`}
-              {...register('name', { required: 'Name is required' })}
-              suppressHydrationWarning
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#c62a2a] ${
-                errors.email ? 'border-red-500' : 'border-gray-300'
-              }`}
-              {...register('email', {
-                required: 'Email is required',
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Invalid email address',
-                },
-              })}
-              suppressHydrationWarning
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="phone" className="block text-gray-700 font-medium mb-2">
-              Phone Number
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#c62a2a] ${
-                errors.phone ? 'border-red-500' : 'border-gray-300'
-              }`}
-              {...register('phone', {
-                required: 'Phone number is required',
-              })}
-              suppressHydrationWarning
-            />
-            {errors.phone && (
-              <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
-            )}
-          </div>
-
-          <div className="mb-6">
-            <label htmlFor="message" className="block text-gray-700 font-medium mb-2">
-              Message
-            </label>
-            <textarea
-              id="message"
-              rows={5}
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#c62a2a] ${
-                errors.message ? 'border-red-500' : 'border-gray-300'
-              }`}
-              {...register('message', { required: 'Message is required' })}
-              suppressHydrationWarning
-            ></textarea>
-            {errors.message && (
-              <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
-            )}
-          </div>
-
-          {submitError && (
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
-              {submitError}
-            </div>
+    <div className="bg-white p-6 shadow-card md:p-8">
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="mb-4">
+          <label htmlFor="name" className="mb-2 block font-semibold text-navy">
+            Full name
+          </label>
+          <input
+            id="name"
+            autoComplete="name"
+            className={fieldClass(!!errors.name)}
+            aria-invalid={!!errors.name}
+            {...register('name', { required: 'Name is required' })}
+          />
+          {errors.name && (
+            <p className="mt-1 text-sm text-red-600" role="alert">
+              {errors.name.message}
+            </p>
           )}
-
-          <button
-            type="submit"
-            className="bg-[#c62a2a] hover:bg-[#a52222] text-white font-semibold py-3 px-6 rounded-md transition-colors w-full flex justify-center"
-            disabled={isSubmitting}
-            suppressHydrationWarning
-          >
-            {isSubmitting ? 'Sending...' : 'Send Message'}
-          </button>
-        </form>
-      )}
+        </div>
+        <div className="mb-4">
+          <label htmlFor="email" className="mb-2 block font-semibold text-navy">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            className={fieldClass(!!errors.email)}
+            {...register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'Enter a valid email address',
+              },
+            })}
+          />
+          {errors.email && (
+            <p className="mt-1 text-sm text-red-600" role="alert">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label htmlFor="phone" className="mb-2 block font-semibold text-navy">
+            Phone
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            autoComplete="tel"
+            className={fieldClass(!!errors.phone)}
+            {...register('phone', { required: 'Phone number is required' })}
+          />
+          {errors.phone && (
+            <p className="mt-1 text-sm text-red-600" role="alert">
+              {errors.phone.message}
+            </p>
+          )}
+        </div>
+        <div className="mb-6">
+          <label htmlFor="message" className="mb-2 block font-semibold text-navy">
+            Message
+          </label>
+          <textarea
+            id="message"
+            rows={5}
+            className={fieldClass(!!errors.message)}
+            {...register('message', { required: 'Message is required' })}
+          />
+          {errors.message && (
+            <p className="mt-1 text-sm text-red-600" role="alert">
+              {errors.message.message}
+            </p>
+          )}
+        </div>
+        {submitError && (
+          <div className="mb-4 rounded-sm bg-red-50 p-3 text-red-700" role="alert">
+            {submitError}
+          </div>
+        )}
+        <button type="submit" className="btn-primary w-full" disabled={isSubmitting}>
+          {isSubmitting ? 'Sending…' : 'Send Message'}
+        </button>
+        <p className="mt-3 text-center text-sm text-muted">
+          Or{' '}
+          <a className="font-semibold text-primary" href={telHref()}>
+            call {SITE.phoneDisplay}
+          </a>{' '}
+          /{' '}
+          <a className="font-semibold text-primary" href={mailHref()}>
+            {SITE.email}
+          </a>
+        </p>
+      </form>
     </div>
   );
 };
 
-export default ContactForm; 
+export default ContactForm;

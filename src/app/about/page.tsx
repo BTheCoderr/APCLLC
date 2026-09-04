@@ -1,142 +1,93 @@
-import Navbar from "@/components/Navbar";
-import CTASection from "@/components/CTASection";
-import Footer from "@/components/Footer";
-import Image from "next/image";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import SiteShell from '@/components/SiteShell';
+import PageHero from '@/components/PageHero';
+import CTASection from '@/components/CTASection';
+import PhotoPlaceholder from '@/components/PhotoPlaceholder';
+import { SITE } from '@/lib/site';
 
-export const metadata = {
-  title: "About Us | All Purpose Contractors LLC",
-  description: "Learn about All Purpose Contractors LLC, a professional cargo van transport and moving services company based in Rhode Island, serving the entire United States.",
+export const metadata: Metadata = {
+  title: 'About APC LLC',
+  description:
+    'All Purpose Contractors LLC is an owner-operated cargo van logistics company based in Warwick, Rhode Island, offering insured property transport across the continental U.S.',
+  alternates: { canonical: `${SITE.domain}/about` },
 };
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen">
-      <Navbar />
-      <div className="bg-[#000000] text-white py-16">
-        <div className="container-custom">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#c62a2a]">About <span className="text-[#c62a2a]">Us</span></h1>
-          <p className="text-xl text-gray-300">
-            Learn more about All Purpose Contractors LLC and our mission
-          </p>
-        </div>
-      </div>
-
-      {/* AboutSection Content */}
-      <div className="py-16 bg-white">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="bg-[#000000] p-6 rounded-lg shadow-md flex justify-center">
-              <div className="relative w-full aspect-square max-w-md">
-                <Image 
-                  src="/APCLLC.jpeg"
-                  alt="APC LLC Logo"
-                  fill
-                  className="object-contain"
-                  style={{ backgroundColor: "#000000" }}
-                  sizes="(max-width: 768px) 100vw, 500px"
-                  priority
-                />
-              </div>
-            </div>
-            <div>
-              <h2 className="text-3xl font-bold mb-6 text-[#c62a2a]">At <span className="text-[#c62a2a]">ALL PURPOSE CONTRACTORS LLC</span></h2>
-              <p className="text-gray-700 mb-4 text-lg">
-                We provide professional cargo van transport and moving services across the entire United States.
-              </p>
-              <p className="text-gray-700 mb-6 text-lg">
-                Founded by a team of driven entrepreneurs with backgrounds in logistics and operations, we&apos;re committed to dependable, affordable, and legal transport solutions — whether you&apos;re a business shipping goods or a family relocating locally or across state lines.
-              </p>
-              
-              <div className="space-y-6">
-                <div className="flex items-start">
-                  <div className="bg-[#ffebee] p-3 rounded-full mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#c62a2a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-[#d4b14b]">Fully Insured</h3>
-                    <p className="text-gray-600">Our service is fully insured and operating in compliance with all state and federal regulations.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="bg-[#ffebee] p-3 rounded-full mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#c62a2a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-[#d4b14b]">Nationwide Service</h3>
-                    <p className="text-gray-600">We're able to haul freight across all 48 continental U.S. states to meet your transport needs.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="py-16 bg-gray-50">
-        <div className="container-custom">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#c62a2a]">Our Mission</h2>
-            <p className="text-lg text-gray-600 max-w-4xl mx-auto">
-              Our mission is to provide reliable, efficient, and affordable cargo van transport
-              and moving services to businesses and individuals throughout the United States.
-              We are committed to exceptional customer service, timeliness, and ensuring your items arrive safely.
+    <SiteShell>
+      <PageHero
+        title="About APC LLC"
+        description="Owner-operated cargo van logistics based in Warwick, Rhode Island."
+      />
+      <section className="bg-white py-16">
+        <div className="container-custom grid gap-12 md:grid-cols-2">
+          <div>
+            <h2 className="headline mb-5 text-3xl text-navy">Built around the van, not a moving slogan</h2>
+            <p className="mb-4 text-lg text-muted">
+              All Purpose Contractors LLC provides professional cargo van transport for businesses
+              and individuals. The work is property freight: same-day runs, scheduled deliveries,
+              long-distance cargo van transport, and local junk removal.
+            </p>
+            <p className="mb-4 text-lg text-muted">
+              Founded by operators with backgrounds in logistics and customer-facing transport, APC
+              is set up for direct communication and insured, legal property hauling.
+            </p>
+            <p className="text-lg text-muted">
+              Interstate household-goods moving is not advertised and is not part of APC&apos;s
+              operating authority. Local residential hauling, when offered, is scoped separately
+              from business freight.
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12">
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-2xl font-bold mb-4 text-[#d4b14b]">Our Values</h3>
-              <ul className="space-y-4">
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">•</span>
-                  <span className="text-gray-700"><strong>Reliability:</strong> We show up on time, every time.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">•</span>
-                  <span className="text-gray-700"><strong>Integrity:</strong> Honest pricing and transparent service.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">•</span>
-                  <span className="text-gray-700"><strong>Care:</strong> Your items are handled with attention and respect.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2 text-[#c62a2a] font-bold">•</span>
-                  <span className="text-gray-700"><strong>Adaptability:</strong> Customized solutions for your specific needs.</span>
-                </li>
-              </ul>
-            </div>
-            
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-2xl font-bold mb-4 text-[#d4b14b]">Service Areas</h3>
-              <p className="text-gray-700 mb-6">
-                We provide service throughout the United States, including:
+          <div className="space-y-6">
+            <div className="border-l-2 border-accent bg-paper p-6">
+              <h3 className="mb-2 font-bold text-navy">Fully insured</h3>
+              <p className="text-muted">
+                Cargo van transportation is insured. Jobs are quoted against the actual load, access,
+                and distance.
               </p>
-              <div className="grid grid-cols-2 gap-2 text-gray-700">
-                <div>
-                  <p>• Northeast Region</p>
-                  <p>• Southeast Region</p>
-                  <p>• Midwest Region</p>
-                </div>
-                <div>
-                  <p>• Southwest Region</p>
-                  <p>• West Coast Region</p>
-                  <p>• All 48 Continental States</p>
-                </div>
-              </div>
-              <p className="mt-6 text-gray-700 font-medium">
-                Available 24/7 for all your transport needs!
+            </div>
+            <div className="border-l-2 border-accent bg-paper p-6">
+              <h3 className="mb-2 font-bold text-navy">Authorized property carrier</h3>
+              <p className="text-muted">
+                USDOT {SITE.usdot} · MC {SITE.mc}. Authorized interstate motor carrier of property,
+                except household goods.
+              </p>
+            </div>
+            <div className="border-l-2 border-accent bg-paper p-6">
+              <h3 className="mb-2 font-bold text-navy">Based in Warwick</h3>
+              <p className="text-muted">
+                Dispatch is in Warwick, Rhode Island, with coverage across Providence and the
+                continental United States for freight that fits a cargo van.
               </p>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+      <section className="bg-paper py-16">
+        <div className="container-custom">
+          <h2 className="headline mb-4 text-3xl text-navy">Mission</h2>
+          <p className="mb-10 max-w-3xl text-lg text-muted">
+            Move freight quickly, communicate directly, and keep the paperwork and authority
+            language accurate. APC is available 24/7 and responds with real availability—not a
+            guaranteed slot until the quote is approved.
+          </p>
+          <div className="grid gap-4 md:grid-cols-2">
+            <PhotoPlaceholder
+              title="Owner / operator"
+              need="A real photograph of the APC operator with the van, used only with permission."
+            />
+            <PhotoPlaceholder
+              title="Warwick base of operations"
+              need="A non-private operational photo from the Warwick / Providence area. Do not publish a residential street address."
+            />
+          </div>
+          <Link href="/quote" className="btn-primary mt-10">
+            Get a Quote
+          </Link>
+        </div>
+      </section>
       <CTASection />
-      <Footer />
-    </main>
+    </SiteShell>
   );
-} 
+}

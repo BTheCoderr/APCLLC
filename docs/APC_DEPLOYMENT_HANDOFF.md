@@ -1,0 +1,110 @@
+# APC LLC Deployment Handoff
+
+**Branch:** `feature/apc-modern-redesign`  
+**Repository:** https://github.com/BTheCoderr/APCLLC  
+**Production domain:** https://apcllc.co/  
+**Production branch:** `main` (do not merge until preview QA is complete)
+
+This redesign stays in the same GitHub repository and the same Netlify site. Do not create a second site or change the custom domain.
+
+---
+
+## What to deploy
+
+1. Open the pull request from `feature/apc-modern-redesign` into `main`.
+2. Use the Netlify Deploy Preview for this branch (Netlify should generate one if the GitHub integration is connected to this repo).
+3. Complete the verification checklist in `docs/TEST_VERIFICATION.md`.
+4. Merge to `main` only after the owner approves copy, forms, and mobile layout.
+5. Confirm production still serves `https://apcllc.co/` after merge.
+
+Do not force-push. Do not deploy this branch as the production branch. Do not change Netlify site settings, DNS, or domain mapping.
+
+---
+
+## Netlify settings to leave alone
+
+These already match production and were not rewritten in the Netlify UI:
+
+| Setting | Value |
+| --- | --- |
+| Build command | `CI=false NODE_OPTIONS=--max-old-space-size=4096 NEXT_TELEMETRY_DISABLED=1 npm run build` |
+| Publish directory | `.next` |
+| Plugin | `@netlify/plugin-nextjs` |
+| Node | 18 |
+| Next.js | 15.3.8 (patched for CVE-2025-55182; Netlify blocks 15.3.1) |
+| Redirect | `/lander` → `/` 301 |
+
+`public/_redirects` no longer includes a CRA-style `/* /index.html 200` catch-all. The old `/api/*` → `/.netlify/functions/api/:splat` force rewrite was removed because the current Next.js runtime serves API routes through the server handler; keeping that rewrite 404s quote and contact POSTs on new deploys. The `/lander` redirect remains.
+
+**Before merging:** confirm `RESEND_API_KEY`, `DATABASE_URL`, and `ADMIN_API_KEY` are set in the Netlify UI. Secret values were removed from `netlify.toml` so GitHub push protection would allow the API-routing fix. If those names exist only in git and not in the Netlify UI, Resend email will not send until they are added in the UI.
+
+---
+
+## Environment variables (names only)
+
+Keep these names. Do not paste values into git.
+
+- `RESEND_API_KEY`
+- `DATABASE_URL`
+- `ADMIN_API_KEY`
+- `NEXT_PUBLIC_METADATA_BASE_URL`
+- `NEXT_PUBLIC_BASE_URL`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+Optional / documented historically:
+
+- `EMAIL_USER`
+- `EMAIL_PASS`
+- `CONTACT_EMAIL`
+- `QUOTE_EMAIL`
+
+Quote and contact email still send through Resend from/to `info@apcllc.co`.
+
+---
+
+## Forms after deploy
+
+| Form | Endpoint | Payload |
+| --- | --- | --- |
+| Quote | `POST /api/quote` | JSON, same required fields as before plus additive detail fields |
+| Contact | `POST /api/contact` | JSON: `name`, `email`, `phone`, `message` |
+
+Required quote fields still include `name`, `email`, `phone`, `serviceType`, `pickupLocation`, and `deliveryLocation`. Existing `serviceType` values are unchanged.
+
+If Resend fails, the browser still opens a `mailto:info@apcllc.co` fallback.
+
+Photo upload was **not** added. The current JSON + Resend path has no safe file storage.
+
+---
+
+## New public routes
+
+- `/services/business-delivery`
+- `/services/cargo-van-transport`
+- `/services/junk-removal`
+- `/sitemap.xml`
+- `/robots.txt`
+
+Existing routes `/`, `/about`, `/services`, `/contact`, and `/quote` remain. `/admin` now returns 404 until cookie-based admin auth is built. `/api/admin/*` stays but requires a server-side `ADMIN_API_KEY` and returns no customer data without it.
+
+---
+
+## Owner decisions still needed
+
+1. Confirm Instagram, Facebook, X/Twitter, and LinkedIn URLs are the live business profiles.
+2. Supply real photographs listed in `docs/MISSING_ASSETS.md`.
+3. Rotate credentials that exist in git history (`RESEND_API_KEY`, `DATABASE_URL`, `ADMIN_API_KEY`, and any mailbox password previously stored as `EMAIL_PASS`). Store replacements only in the Netlify UI for Production and Deploy Previews. See `docs/APC_SECURITY_PASS.md`.
+4. `/admin` is disabled (404). A later PR should add HttpOnly cookie sessions if an admin dashboard is still needed.
+5. Confirm whether local residential hauling should remain in the quote dropdown (it is labeled as not interstate household goods).
+6. Send one labeled preview quote after env vars are confirmed in Netlify.
+
+---
+
+## Rollback
+
+If production misbehaves after merge:
+
+1. Revert the merge commit on `main` (no history rewrite).
+2. Redeploy `main` from Netlify.
+3. Leave DNS and the Netlify site connection untouched.
