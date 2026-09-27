@@ -26,7 +26,6 @@ const QuoteForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const [usedMailtoFallback, setUsedMailtoFallback] = useState(false);
   const inFlight = useRef(false);
 
   const {
@@ -74,42 +73,11 @@ const QuoteForm = () => {
     if (starter.date) setValue('date', starter.date);
   }, [searchParams, setValue]);
 
-  const handleDirectEmailSending = (data: QuoteFormFields) => {
-    try {
-      const payload = buildQuoteApiPayload(data);
-      const subject = encodeURIComponent(`Quote Request: ${payload.serviceType}`);
-      const body = encodeURIComponent(
-        `Name: ${payload.name}\n` +
-          `Email: ${payload.email}\n` +
-          `Phone: ${payload.phone}\n` +
-          `Service Type: ${payload.serviceType}\n` +
-          `Pickup Location: ${payload.pickupLocation}\n` +
-          `Delivery Location: ${payload.deliveryLocation}\n` +
-          `Preferred Date: ${payload.date || 'Not specified'}\n\n` +
-          `${payload.details || 'None provided'}`
-      );
-      const tempLink = document.createElement('a');
-      tempLink.href = `mailto:${SITE.email}?subject=${subject}&body=${body}`;
-      document.body.appendChild(tempLink);
-      tempLink.click();
-      document.body.removeChild(tempLink);
-      setUsedMailtoFallback(true);
-      setSubmitSuccess(true);
-    } catch (error) {
-      setSubmitError('There was a problem preparing your email. Please call or text APC directly.');
-      console.error('Email preparation error:', error);
-    } finally {
-      inFlight.current = false;
-      setIsSubmitting(false);
-    }
-  };
-
   const onSubmit = async (data: QuoteFormFields) => {
     if (inFlight.current) return;
     inFlight.current = true;
     setIsSubmitting(true);
     setSubmitError('');
-    setUsedMailtoFallback(false);
 
     const payload = buildQuoteApiPayload(data);
 
@@ -125,13 +93,9 @@ const QuoteForm = () => {
         reset();
         return;
       }
-      if (response.status === 400 || response.status === 429) {
-        setSubmitError(result.error || 'Please check the form and try again.');
-        return;
-      }
-      handleDirectEmailSending(data);
+      setSubmitError(result.error || 'We could not send your quote. Please try again or call APC.');
     } catch {
-      handleDirectEmailSending(data);
+      setSubmitError('We could not send your quote. Please try again or call APC.');
     } finally {
       inFlight.current = false;
       setIsSubmitting(false);
@@ -147,12 +111,10 @@ const QuoteForm = () => {
     return (
       <div className="bg-white p-6 shadow-card md:p-8" role="status" aria-live="polite">
         <h3 className="headline mb-4 text-3xl text-navy">
-          {usedMailtoFallback ? 'Finish sending your quote' : 'Quote request sent'}
+          Quote request sent
         </h3>
         <p className="mb-6 text-muted">
-          {usedMailtoFallback
-            ? 'Your email app should have opened with a prepared request. Please press Send there. If it did not open, call or text APC; this form has not sent your request.'
-            : 'Thank you. APC will reply with availability and pricing. Submitting a request does not guarantee a same-day slot.'}
+          Thank you. APC will reply with availability and pricing. Submitting a request does not guarantee a same-day slot.
         </p>
         <div className="mb-6 flex flex-col gap-2 text-navy sm:flex-row sm:gap-6">
           <a className="font-semibold text-primary" href={telHref()}>
@@ -166,7 +128,6 @@ const QuoteForm = () => {
           className="btn-primary"
           onClick={() => {
             setSubmitSuccess(false);
-            setUsedMailtoFallback(false);
             reset();
           }}
         >
