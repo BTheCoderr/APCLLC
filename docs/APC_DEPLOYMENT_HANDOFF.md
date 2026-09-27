@@ -59,7 +59,7 @@ Optional / documented historically:
 - `CONTACT_EMAIL`
 - `QUOTE_EMAIL`
 
-Quote and contact email still send through Resend from/to `info@apcllc.co`.
+Quote and contact email send through Resend from `info@apcllc.co`; owner notifications and customer acknowledgment replies go to `bferrell514@gmail.com` by default. `APC_NOTIFICATION_EMAIL` can override the monitored inbox in Netlify. This routing covers website forms only. Direct messages to the public `info@apcllc.co` address still require mailbox forwarding at the domain's receiving mail provider.
 
 ---
 

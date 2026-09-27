@@ -3,6 +3,7 @@ import { Resend } from "resend";
 import sql from "@/utils/db";
 import { escapeHtml, htmlLines } from "@/lib/html";
 import { SITE } from "@/lib/site";
+import { APC_NOTIFICATION_EMAIL } from "@/lib/email-routing";
 import { sendEmail } from "@/lib/send-email";
 import { getClientIp } from "@/lib/admin-auth";
 import { rateLimit } from "@/lib/rate-limit";
@@ -94,7 +95,7 @@ export async function POST(request: Request) {
     try {
       const adminEmailId = await sendEmail(resend, {
         from: `APC LLC <${SITE.email}>`,
-        to: SITE.email,
+        to: APC_NOTIFICATION_EMAIL,
         subject: `Contact Form Submission from ${name}`,
         html: adminEmailHtml,
         replyTo: email,
@@ -107,7 +108,7 @@ export async function POST(request: Request) {
           to: email,
           subject: "We've received your message - APC LLC",
           html: userEmailHtml,
-          replyTo: SITE.email,
+          replyTo: APC_NOTIFICATION_EMAIL,
         });
       } catch {
         console.error("Contact acknowledgment email failed after admin email was accepted");
