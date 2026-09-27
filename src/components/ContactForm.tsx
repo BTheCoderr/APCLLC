@@ -14,7 +14,6 @@ type FormData = {
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [usedMailtoFallback, setUsedMailtoFallback] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const inFlight = useRef(false);
 
@@ -25,34 +24,11 @@ const ContactForm = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const handleDirectEmailSending = (data: FormData) => {
-    try {
-      const subject = encodeURIComponent(`Contact Form Submission from ${data.name}`);
-      const body = encodeURIComponent(
-        `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\n\nMessage:\n${data.message}`
-      );
-      const tempLink = document.createElement('a');
-      tempLink.href = `mailto:${SITE.email}?subject=${subject}&body=${body}`;
-      document.body.appendChild(tempLink);
-      tempLink.click();
-      document.body.removeChild(tempLink);
-      setUsedMailtoFallback(true);
-      setSubmitSuccess(true);
-    } catch (error) {
-      setSubmitError('There was a problem preparing your email. Please call APC directly.');
-      console.error('Email preparation error:', error);
-    } finally {
-      inFlight.current = false;
-      setIsSubmitting(false);
-    }
-  };
-
   const onSubmit = async (data: FormData) => {
     if (inFlight.current) return;
     inFlight.current = true;
     setIsSubmitting(true);
     setSubmitError('');
-    setUsedMailtoFallback(false);
 
     try {
       const response = await fetch('/api/contact', {
@@ -66,13 +42,9 @@ const ContactForm = () => {
         reset();
         return;
       }
-      if (response.status === 400 || response.status === 429) {
-        setSubmitError(result.error || 'Please check the form and try again.');
-        return;
-      }
-      handleDirectEmailSending(data);
+      setSubmitError(result.error || 'We could not send your message. Please try again or call APC.');
     } catch {
-      handleDirectEmailSending(data);
+      setSubmitError('We could not send your message. Please try again or call APC.');
     } finally {
       inFlight.current = false;
       setIsSubmitting(false);
@@ -88,19 +60,16 @@ const ContactForm = () => {
     return (
       <div className="bg-white p-6 shadow-card md:p-8" role="status" aria-live="polite">
         <h3 className="headline mb-4 text-3xl text-navy">
-          {usedMailtoFallback ? 'Finish sending your message' : 'Message sent'}
+          Message sent
         </h3>
         <p className="mb-6 text-muted">
-          {usedMailtoFallback
-            ? 'Your email app should have opened with a prepared message. Please press Send there. If it did not open, call APC; this form has not sent your message.'
-            : 'Thank you. APC will get back to you as soon as possible. For urgent freight, call or text.'}
+          Thank you. APC will get back to you as soon as possible. For urgent freight, call or text.
         </p>
         <a className="btn-primary mb-3" href={telHref()}>
           Call {SITE.phoneDisplay}
         </a>
         <button className="mt-4 block font-semibold text-primary" onClick={() => {
           setSubmitSuccess(false);
-          setUsedMailtoFallback(false);
           reset();
         }}>
           Send another message
