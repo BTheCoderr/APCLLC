@@ -3,11 +3,13 @@ import { Resend } from "resend";
 import sql from "@/utils/db";
 import { escapeHtml, htmlLines } from "@/lib/html";
 import { SITE } from "@/lib/site";
+import { sendEmail } from "@/lib/send-email";
 import { getClientIp } from "@/lib/admin-auth";
 import { rateLimit } from "@/lib/rate-limit";
 import {
   isDuplicateSubmission,
   PUBLIC_FORM_ERROR,
+  releaseSubmission,
   submissionFingerprint,
 } from "@/lib/form-guard";
 
@@ -42,6 +44,7 @@ export async function POST(request: Request) {
 
     const resend = getResend();
     if (!resend) {
+      releaseSubmission(fingerprint);
       return NextResponse.json({ error: PUBLIC_FORM_ERROR }, { status: 500 });
     }
 
@@ -89,7 +92,7 @@ export async function POST(request: Request) {
     `;
 
     try {
-      const adminResult = await resend.emails.send({
+      const adminEmailId = await sendEmail(resend, {
         from: `APC LLC <${SITE.email}>`,
         to: SITE.email,
         subject: `Contact Form Submission from ${name}`,
@@ -97,22 +100,27 @@ export async function POST(request: Request) {
         replyTo: email,
       });
 
-      const userResult = await resend.emails.send({
-        from: `APC LLC <${SITE.email}>`,
-        to: email,
-        subject: "We've received your message - APC LLC",
-        html: userEmailHtml,
-        replyTo: SITE.email,
-      });
+      let userEmailId: string | null = null;
+      try {
+        userEmailId = await sendEmail(resend, {
+          from: `APC LLC <${SITE.email}>`,
+          to: email,
+          subject: "We've received your message - APC LLC",
+          html: userEmailHtml,
+          replyTo: SITE.email,
+        });
+      } catch {
+        console.error("Contact acknowledgment email failed after admin email was accepted");
+      }
 
       if (dbOperationSuccessful && submissionId) {
         try {
           await sql.safeQuery`
             UPDATE contact_submissions
             SET
-              email_status = 'sent',
-              admin_email_id = ${adminResult.data?.id || null},
-              user_email_id = ${userResult.data?.id || null}
+              email_status = ${userEmailId ? "sent" : "admin_sent"},
+              admin_email_id = ${adminEmailId},
+              user_email_id = ${userEmailId}
             WHERE
               id = ${submissionId}
           `;
@@ -124,9 +132,11 @@ export async function POST(request: Request) {
       return NextResponse.json({
         success: true,
         databaseSaved: dbOperationSuccessful,
+        acknowledgmentSent: !!userEmailId,
       });
     } catch {
       console.error("Error sending contact email via Resend");
+      releaseSubmission(fingerprint);
       return NextResponse.json({ error: PUBLIC_FORM_ERROR }, { status: 500 });
     }
   } catch {
