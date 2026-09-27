@@ -31,6 +31,10 @@ export function isDuplicateSubmission(
   return false;
 }
 
+export function releaseSubmission(fingerprint: string): void {
+  recentSubmissions.delete(fingerprint);
+}
+
 export function resetSubmissionGuardForTests(): void {
   recentSubmissions.clear();
 }

@@ -95,7 +95,6 @@ const QuoteForm = () => {
       document.body.removeChild(tempLink);
       setUsedMailtoFallback(true);
       setSubmitSuccess(true);
-      reset();
     } catch (error) {
       setSubmitError('There was a problem preparing your email. Please call or text APC directly.');
       console.error('Email preparation error:', error);
@@ -147,10 +146,12 @@ const QuoteForm = () => {
   if (submitSuccess) {
     return (
       <div className="bg-white p-6 shadow-card md:p-8" role="status" aria-live="polite">
-        <h3 className="headline mb-4 text-3xl text-navy">Quote request sent</h3>
+        <h3 className="headline mb-4 text-3xl text-navy">
+          {usedMailtoFallback ? 'Finish sending your quote' : 'Quote request sent'}
+        </h3>
         <p className="mb-6 text-muted">
           {usedMailtoFallback
-            ? 'Your email app should have opened with the request. If it did not send, call or text APC and we will take the details directly.'
+            ? 'Your email app should have opened with a prepared request. Please press Send there. If it did not open, call or text APC; this form has not sent your request.'
             : 'Thank you. APC will reply with availability and pricing. Submitting a request does not guarantee a same-day slot.'}
         </p>
         <div className="mb-6 flex flex-col gap-2 text-navy sm:flex-row sm:gap-6">
@@ -166,6 +167,7 @@ const QuoteForm = () => {
           onClick={() => {
             setSubmitSuccess(false);
             setUsedMailtoFallback(false);
+            reset();
           }}
         >
           Request another quote
