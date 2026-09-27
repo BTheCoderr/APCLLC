@@ -4,6 +4,7 @@ import sql from "@/utils/db";
 import { escapeHtml, htmlLines } from "@/lib/html";
 import { displayServiceType, validateQuotePayload } from "@/lib/quote";
 import { SITE } from "@/lib/site";
+import { APC_NOTIFICATION_EMAIL } from "@/lib/email-routing";
 import { sendEmail } from "@/lib/send-email";
 import { getClientIp } from "@/lib/admin-auth";
 import { rateLimit } from "@/lib/rate-limit";
@@ -176,7 +177,7 @@ export async function POST(request: Request) {
     try {
       const adminEmailId = await sendEmail(resend, {
         from: `APC LLC <${SITE.email}>`,
-        to: SITE.email,
+        to: APC_NOTIFICATION_EMAIL,
         subject: `Quote Request: ${serviceTypeDisplay}`,
         html: adminEmailHtml,
         replyTo: email,
@@ -189,7 +190,7 @@ export async function POST(request: Request) {
           to: email,
           subject: `Your Quote Request - ${serviceTypeDisplay} - APC LLC`,
           html: userEmailHtml,
-          replyTo: SITE.email,
+          replyTo: APC_NOTIFICATION_EMAIL,
         });
       } catch {
         console.error("Quote acknowledgment email failed after admin email was accepted");
