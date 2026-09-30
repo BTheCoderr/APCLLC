@@ -1,5 +1,11 @@
 # All Purpose Contractors LLC Website
 
+<!-- repo-intro:start -->
+**Project snapshot:** The production website for All Purpose Contractors LLC, an owner-operated cargo-van logistics business, with service presentation, mobile-first conversion paths, and quote/contact workflows.
+
+**What it demonstrates:** Next.js · Tailwind CSS · responsive business UX · form flows · Netlify deployment.
+<!-- repo-intro:end -->
+
 This is the official website for All Purpose Contractors LLC, a freight business in Rhode Island offering cargo van delivery and moving services.
 
 ## Features
