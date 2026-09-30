@@ -31,3 +31,5 @@
   port = 4000
   targetPort = 4000
   framework = "next"
+
+# Netlify rebuild marker: 2026-09-30 portfolio refresh
