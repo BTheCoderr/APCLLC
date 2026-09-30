@@ -1,82 +1,80 @@
-# All Purpose Contractors LLC Website
+# All Purpose Contractors LLC
 
 <!-- repo-intro:start -->
-**Project snapshot:** The production website for All Purpose Contractors LLC, an owner-operated cargo-van logistics business, with service presentation, mobile-first conversion paths, and quote/contact workflows.
+**Project snapshot:** The production website for All Purpose Contractors LLC, an owner-operated cargo-van logistics business, built around clear service presentation, mobile-first conversion paths, and quote/contact workflows.
 
-**What it demonstrates:** Next.js · Tailwind CSS · responsive business UX · form flows · Netlify deployment.
+**What it demonstrates:** Next.js 15 · React 19 · TypeScript · Tailwind CSS · responsive business UX · form/email integrations · Netlify production delivery.
 <!-- repo-intro:end -->
 
-This is the official website for All Purpose Contractors LLC, a freight business in Rhode Island offering cargo van delivery and moving services.
+**Live site:** https://apcllc.co
 
-## Features
+APC's site is designed to turn a local logistics business into a credible, usable web presence without burying visitors in a complicated freight platform.
 
-- Responsive design for all device sizes
-- Information about company services
-- Contact form for inquiries
-- Quote request system
-- Company information and mission
+## Product at a glance
 
-## Tech Stack
+| Area | Current site |
+| --- | --- |
+| Business | Owner-operated cargo-van delivery / moving support |
+| UX | Mobile-first service discovery and conversion |
+| Lead flow | Quote and contact workflows |
+| Frontend | Next.js + React + Tailwind + Framer Motion |
+| Form/data integrations | React Hook Form plus server/email/data integration packages |
+| Hosting | Netlify |
+| SEO | Sitemap/robots and service-oriented route structure |
 
-- [Next.js](https://nextjs.org/) - React framework
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [React Hook Form](https://react-hook-form.com/) - Form validation
-- [Framer Motion](https://www.framer.com/motion/) - Animations
+## Conversion-first design
 
-## Getting Started
+The site prioritizes the actions a real customer is likely to need:
 
-### Prerequisites
+- understand available cargo-van/logistics services
+- see the company positioning quickly
+- request a quote
+- contact the business from mobile
+- move between service pages without hunting through a large navigation system
 
-- Node.js 18.0 or later
-- npm or yarn
+The mobile experience is treated as a first-class conversion surface rather than a desktop layout squeezed onto a phone.
 
-### Installation
+## Tech stack
 
-1. Clone the repository
-   ```bash
-   git clone https://github.com/yourusername/apcllc-website.git
-   ```
+- Next.js 15
+- React 19
+- TypeScript
+- Tailwind CSS
+- React Hook Form
+- Framer Motion
+- Resend / Nodemailer-capable email workflows
+- Supabase / Postgres / MongoDB packages available for server-side integrations
+- Netlify
 
-2. Install dependencies
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
+## Local development
 
-3. Run the development server
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
+```bash
+npm install
+npm run dev
+```
 
-4. Open [http://localhost:4000](http://localhost:4000) in your browser
+Development defaults to:
+
+```text
+http://localhost:4000
+```
+
+Quality commands:
+
+```bash
+npm run typecheck
+npm test
+npm run build
+```
 
 ## Deployment
 
-This site is deployed using [Netlify](https://www.netlify.com/).
+Netlify is the production host. The repository tracks its build configuration and the site is served from the custom domain:
 
-### Netlify Deployment Notes
+**https://apcllc.co**
 
-If you encounter ESLint errors during deployment, they have been addressed in the `eslint.config.mjs` file. The most common issues were:
+Before a release, the important production check is not just “did the build pass?”—it is whether a real quote/contact submission reaches the intended business inbox end-to-end.
 
-1. Unused imports (`AboutSection` in about/page.tsx and `Head` in page.tsx)
-2. Unescaped apostrophes (`'`) in text content
+---
 
-The ESLint configuration has been updated to ignore these specific issues, but it's better to fix them properly by:
-- Removing unused imports
-- Using `&apos;` instead of `'` in JSX text content
-
-To deploy to Netlify:
-
-1. Push your changes to the GitHub repository
-2. Connect your repository to Netlify
-3. Use the following build settings:
-   - Build command: `npm run build`
-   - Publish directory: `.next`
-   - Node.js version: 18.x (or latest LTS)
-
-## License
-
-All rights reserved © All Purpose Contractors LLC
+This repository is a production local-business build: the value is in **clarity, conversion, responsive behavior, and reliable lead capture**, not unnecessary application complexity.
