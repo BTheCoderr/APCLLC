@@ -1,5 +1,7 @@
 # All Purpose Contractors LLC
 
+[![CI](https://github.com/BTheCoderr/APCLLC/actions/workflows/ci.yml/badge.svg)](https://github.com/BTheCoderr/APCLLC/actions/workflows/ci.yml)
+
 <!-- repo-intro:start -->
 **Project snapshot:** The production website for All Purpose Contractors LLC, an owner-operated cargo-van logistics business, built around clear service presentation, mobile-first conversion paths, and quote/contact workflows.
 
